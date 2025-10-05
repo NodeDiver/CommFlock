@@ -19,6 +19,7 @@ export function Providers({ children, messages, locale }: ProvidersProps) {
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
+          suppressHydrationWarning
         >
           {children}
         </ThemeProvider>

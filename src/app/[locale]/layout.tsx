@@ -2,6 +2,7 @@ import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
+import { ThemeScript } from '@/components/theme-script'
 import { Geist, Geist_Mono } from "next/font/google"
 
 const geistSans = Geist({
@@ -33,8 +34,14 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body 
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <Providers messages={messages} locale={locale}>
           {children}
           <Toaster />
