@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,6 +31,7 @@ export default function DiscoverPage() {
   const [isLoading, setIsLoading] = useState(true)
   const { data: session } = useSession()
   const t = useTranslations()
+  const locale = useLocale()
 
   useEffect(() => {
     fetchCommunities()
@@ -125,7 +126,7 @@ export default function DiscoverPage() {
                   </Badge>
                 </div>
                 <div className="mt-4">
-                  <Link href={`/${community.slug}`}>
+                  <Link href={`/${locale}/${community.slug}`}>
                     <Button className="w-full">View Community</Button>
                   </Link>
                 </div>
@@ -138,7 +139,7 @@ export default function DiscoverPage() {
           <div className="text-center py-12">
             <p className="text-gray-500 mb-4">No communities found</p>
             {session && (
-              <Link href="/create">
+              <Link href={`/${locale}/create`}>
                 <Button>Create First Community</Button>
               </Link>
             )}

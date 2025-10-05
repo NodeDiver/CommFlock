@@ -22,9 +22,14 @@ export default async function HomePage({
       {/* Header */}
       <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm animate-fade-in-down">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover-scale animate-bounce delay-200">
-              CommFlock ⚡
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/logo.svg" 
+              alt="CommFlock" 
+              className="h-10 w-10 hover-scale animate-bounce delay-200"
+            />
+            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover-scale">
+              CommFlock
             </h1>
           </div>
               <nav className="flex items-center space-x-4">

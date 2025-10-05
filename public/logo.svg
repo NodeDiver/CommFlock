@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111725"/>
+      <stop offset="100%" stop-color="#1A1F3C"/>
+    </linearGradient>
+    <radialGradient id="pulse" cx="75%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="rgba(151, 71, 255, 0.65)"/>
+      <stop offset="65%" stop-color="rgba(151, 71, 255, 0.15)"/>
+      <stop offset="100%" stop-color="rgba(151, 71, 255, 0)"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <circle cx="168" cy="70" r="92" fill="url(#pulse)"/>
+  <path d="M128 48c-44 0-80 36-80 80s36 80 80 80c30 0 56-16 70-39l-33-11c-13 15-33 24-53 21-28-4-49-28-49-57s23-55 52-57c19-2 36 6 48 20l34-10C183 62 157 48 128 48Z" fill="#5CC8FF"/>
+  <path d="M166 76l-18 52 30 10-30 42 16-38-30-10 32-56z" fill="#F9B233"/>
+  <path d="M124 112c-5-6-12-10-20-11-9 0-17 5-20 12 7-2 15-1 21 3 7 5 11 12 11 20 6-4 9-11 8-18z" fill="#fff"/>
+  <path d="M178 114c-5-6-12-10-20-11-9 0-17 5-20 12 7-2 15-1 21 3 7 5 11 12 11 20 6-4 9-11 8-18z" fill="#fff" opacity=".9"/>
+</svg>

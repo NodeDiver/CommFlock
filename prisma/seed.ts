@@ -112,7 +112,7 @@ async function main() {
   console.log('Database seeded successfully!')
   console.log('Demo user:', demoUser.username)
   console.log('Demo community:', demoCommunity.slug)
-  console.log('Visit: http://localhost:3000/demo-community')
+  console.log('Visit: http://localhost:3000/es/demo-community or http://localhost:3000/en/demo-community')
 }
 
 main()
