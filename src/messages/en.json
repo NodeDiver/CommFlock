@@ -22,7 +22,10 @@
     "toggleTheme": "Toggle theme",
     "language": "Language",
     "english": "English",
-    "spanish": "Spanish"
+    "spanish": "Spanish",
+    "discover": "Discover",
+    "signIn": "Sign In",
+    "create": "Create"
   },
   "nav": {
     "signIn": "Sign In",

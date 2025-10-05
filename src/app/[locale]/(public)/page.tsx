@@ -6,7 +6,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageToggle } from '@/components/language-toggle'
 
 export default function HomePage() {
-  const t = useTranslations()
+  const t = useTranslations('common')
   const locale = useLocale()
 
   return (
@@ -22,17 +22,17 @@ export default function HomePage() {
           <nav className="flex items-center space-x-4">
             <Link href={`/${locale}/discover`}>
               <Button variant="ghost" className="hover-lift delay-300">
-                {t('nav.discover')} 🔍
+                {t('discover')} 🔍
               </Button>
             </Link>
             <Link href={`/${locale}/sign-in`}>
               <Button variant="outline" className="hover-glow delay-400">
-                {t('nav.signIn')} 👤
+                {t('signIn')} 👤
               </Button>
             </Link>
             <Link href={`/${locale}/create`}>
               <Button className="hover-lift animate-pulse delay-500">
-                {t('nav.create')} ✨
+                {t('create')} ✨
               </Button>
             </Link>
             <ThemeToggle />
@@ -45,23 +45,23 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6 animate-fade-in-up delay-200">
-            {t('common.buildCommunities')}{' '}
+            {t('buildCommunities')}{' '}
             <span className="text-indigo-600 dark:text-indigo-400 gradient-text animate-glow delay-300">
-              {t('common.lightningSpeed')}
+              {t('lightningSpeed')}
             </span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 animate-fade-in-up delay-400 text-shadow">
-            {t('common.communityPlatform')} 🚀
+            {t('communityPlatform')} 🚀
           </p>
           <div className="flex justify-center space-x-4 animate-fade-in-up delay-500">
             <Link href={`/${locale}/create`}>
               <Button size="lg" className="px-8 hover-lift hover-glow animate-pulse">
-                {t('common.createCommunity')} ⚡
+                {t('createCommunity')} ⚡
               </Button>
             </Link>
             <Link href={`/${locale}/discover`}>
               <Button size="lg" variant="outline" className="px-8 hover-lift hover-scale">
-                {t('common.exploreCommunities')} 🔍
+                {t('exploreCommunities')} 🔍
               </Button>
             </Link>
           </div>
@@ -72,15 +72,15 @@ export default function HomePage() {
           <Card className="hover-lift animate-fade-in-left delay-600 hover-glow">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                ⚡ {t('common.lightningPayments')}
+                ⚡ {t('lightningPayments')}
               </CardTitle>
               <CardDescription>
-                {t('common.lightningDescription')}
+                {t('lightningDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                {t('common.lightningDetails')}
+                {t('lightningDetails')}
               </p>
             </CardContent>
           </Card>
@@ -88,15 +88,15 @@ export default function HomePage() {
           <Card className="hover-lift animate-scale-in delay-700 hover-rotate">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                🏢 {t('common.multiTenant')}
+                🏢 {t('multiTenant')}
               </CardTitle>
               <CardDescription>
-                {t('common.multiTenantDescription')}
+                {t('multiTenantDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                {t('common.multiTenantDetails')}
+                {t('multiTenantDetails')}
               </p>
             </CardContent>
           </Card>
@@ -104,15 +104,15 @@ export default function HomePage() {
           <Card className="hover-lift animate-fade-in-right delay-800 hover-wobble">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                🎪 {t('common.eventsPolls')}
+                🎪 {t('eventsPolls')}
               </CardTitle>
               <CardDescription>
-                {t('common.eventsPollsDescription')}
+                {t('eventsPollsDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                {t('common.eventsPollsDetails')}
+                {t('eventsPollsDetails')}
               </p>
             </CardContent>
           </Card>
@@ -123,7 +123,7 @@ export default function HomePage() {
       <footer className="border-t bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm mt-20 animate-fade-in-up delay-900">
         <div className="container mx-auto px-4 py-8 text-center text-gray-600 dark:text-gray-300">
           <p className="animate-float">
-            {t('common.copyright')} 💜
+            {t('copyright')} 💜
           </p>
         </div>
       </footer>
