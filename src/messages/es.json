@@ -1,0 +1,125 @@
+{
+  "common": {
+    "welcome": "Bienvenido a CommFlock",
+    "buildCommunities": "Construye Comunidades dinámicas con",
+    "lightningSpeed": "Nostr y Lightning 💪",
+    "communityPlatform": "CommFlock es una plataforma de comunidades donde los usuarios crean y se unen a comunidades, coordinan eventos y se conectan con pagos Lightning.",
+    "createCommunity": "Crear Comunidad",
+    "exploreCommunities": "Explorar Comunidades",
+    "features": "Características",
+    "lightningPayments": "Pagos Lightning",
+    "lightningDescription": "Soporte integrado de Lightning Network para creación de comunidades y pagos de eventos",
+    "lightningDetails": "Cada comunidad y creación de evento cuesta 21 sats, impulsado por pagos Lightning",
+    "multiTenant": "Multi-Inquilino",
+    "multiTenantDescription": "Cada comunidad tiene su propio espacio con configuraciones y políticas personalizadas",
+    "multiTenantDetails": "Comunidades públicas o privadas con políticas de unión flexibles y gestión de miembros",
+    "eventsPolls": "Eventos y Encuestas",
+    "eventsPollsDescription": "Coordina actividades con eventos, encuestas y anuncios de la comunidad",
+    "eventsPollsDetails": "Crea eventos con control de capacidad, ejecuta encuestas con opciones de votación flexibles",
+    "copyright": "© 2024 CommFlock. Construido con Next.js, Prisma y Lightning.",
+    "darkMode": "Modo Oscuro",
+    "lightMode": "Modo Claro",
+    "toggleTheme": "Cambiar tema",
+    "language": "Idioma",
+    "english": "Inglés",
+    "spanish": "Español"
+  },
+  "nav": {
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión",
+    "discover": "Descubrir",
+    "create": "Crear",
+    "dashboard": "Panel",
+    "admin": "Admin"
+  },
+  "community": {
+    "public": "Público",
+    "private": "Privado",
+    "join": {
+      "auto": "Unión Automática",
+      "approval": "Requiere Aprobación",
+      "closed": "Cerrado"
+    },
+    "members": "Miembros",
+    "created": "Creado",
+    "description": "Descripción",
+    "rules": "Reglas",
+    "announcements": "Anuncios",
+    "events": "Eventos",
+    "polls": "Encuestas",
+    "leaderboard": "Tabla de Posiciones",
+    "badges": "Insignias"
+  },
+  "actions": {
+    "create": "Crear",
+    "save": "Guardar",
+    "join": "Unirse",
+    "requestJoin": "Solicitar Unirse",
+    "register": "Registrarse",
+    "pay21sats": "Pagar 21 sats",
+    "vote": "Votar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "approve": "Aprobar",
+    "reject": "Rechazar"
+  },
+  "events": {
+    "capacity": "Capacidad",
+    "attending": "Asistiendo",
+    "priceSats": "Precio (sats)",
+    "startsAt": "Comienza",
+    "endsAt": "Termina",
+    "create": "Crear Evento",
+    "title": "Título",
+    "minQuorum": "Quórum Mínimo"
+  },
+  "polls": {
+    "vote": "Votar",
+    "results": "Resultados",
+    "endsAt": "Termina",
+    "create": "Crear Encuesta",
+    "question": "Pregunta",
+    "options": "Opciones",
+    "addOption": "Agregar Opción",
+    "voters": "Votantes"
+  },
+  "admin": {
+    "requests": "Solicitudes de Unión",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "points": "Puntos",
+    "badges": "Insignias",
+    "createBadge": "Crear Insignia",
+    "assignBadge": "Asignar Insignia",
+    "name": "Nombre",
+    "description": "Descripción",
+    "icon": "Icono"
+  },
+  "forms": {
+    "username": "Nombre de Usuario",
+    "email": "Email (Opcional)",
+    "communityName": "Nombre de la Comunidad",
+    "slug": "Slug",
+    "communityDescription": "Descripción de la Comunidad",
+    "isPublic": "Comunidad Pública",
+    "joinPolicy": "Política de Unión",
+    "requiresLightningAddress": "Requiere Dirección Lightning",
+    "requiresNostrPubkey": "Requiere Clave Pública Nostr"
+  },
+  "errors": {
+    "required": "Este campo es requerido",
+    "invalidEmail": "Dirección de email inválida",
+    "usernameTaken": "Nombre de usuario ya tomado",
+    "slugTaken": "Slug ya tomado",
+    "unauthorized": "No autorizado",
+    "notFound": "No encontrado",
+    "serverError": "Error del servidor"
+  },
+  "success": {
+    "communityCreated": "Comunidad creada exitosamente",
+    "joinedCommunity": "Te uniste a la comunidad exitosamente",
+    "eventCreated": "Evento creado exitosamente",
+    "pollCreated": "Encuesta creada exitosamente",
+    "voted": "Voto enviado exitosamente"
+  }
+}

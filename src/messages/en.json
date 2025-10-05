@@ -1,0 +1,125 @@
+{
+  "common": {
+    "welcome": "Welcome to CommFlock",
+    "buildCommunities": "Build Super-Powered Communities with",
+    "lightningSpeed": "Nostr and Lightning 💪",
+    "communityPlatform": "CommFlock is a community platform where users create and join communities, coordinate events, and connect with Lightning payments.",
+    "createCommunity": "Create Community",
+    "exploreCommunities": "Explore Communities",
+    "features": "Features",
+    "lightningPayments": "Lightning Payments",
+    "lightningDescription": "Built-in Lightning Network support for community creation and event payments",
+    "lightningDetails": "Each community and event creation costs 21 sats, powered by Lightning payments",
+    "multiTenant": "Multi-Tenant",
+    "multiTenantDescription": "Each community has its own space with custom settings and policies",
+    "multiTenantDetails": "Public or private communities with flexible join policies and member management",
+    "eventsPolls": "Events & Polls",
+    "eventsPollsDescription": "Coordinate activities with events, polls, and community announcements",
+    "eventsPollsDetails": "Create events with capacity control, run polls with flexible voting options",
+    "copyright": "© 2024 CommFlock. Built with Next.js, Prisma, and Lightning.",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "toggleTheme": "Toggle theme",
+    "language": "Language",
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "nav": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "discover": "Discover",
+    "create": "Create",
+    "dashboard": "Dashboard",
+    "admin": "Admin"
+  },
+  "community": {
+    "public": "Public",
+    "private": "Private",
+    "join": {
+      "auto": "Auto Join",
+      "approval": "Approval Required",
+      "closed": "Closed"
+    },
+    "members": "Members",
+    "created": "Created",
+    "description": "Description",
+    "rules": "Rules",
+    "announcements": "Announcements",
+    "events": "Events",
+    "polls": "Polls",
+    "leaderboard": "Leaderboard",
+    "badges": "Badges"
+  },
+  "actions": {
+    "create": "Create",
+    "save": "Save",
+    "join": "Join",
+    "requestJoin": "Request to Join",
+    "register": "Register",
+    "pay21sats": "Pay 21 sats",
+    "vote": "Vote",
+    "edit": "Edit",
+    "delete": "Delete",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "events": {
+    "capacity": "Capacity",
+    "attending": "Attending",
+    "priceSats": "Price (sats)",
+    "startsAt": "Starts At",
+    "endsAt": "Ends At",
+    "create": "Create Event",
+    "title": "Title",
+    "minQuorum": "Minimum Quorum"
+  },
+  "polls": {
+    "vote": "Vote",
+    "results": "Results",
+    "endsAt": "Ends At",
+    "create": "Create Poll",
+    "question": "Question",
+    "options": "Options",
+    "addOption": "Add Option",
+    "voters": "Voters"
+  },
+  "admin": {
+    "requests": "Join Requests",
+    "approve": "Approve",
+    "reject": "Reject",
+    "points": "Points",
+    "badges": "Badges",
+    "createBadge": "Create Badge",
+    "assignBadge": "Assign Badge",
+    "name": "Name",
+    "description": "Description",
+    "icon": "Icon"
+  },
+  "forms": {
+    "username": "Username",
+    "email": "Email (Optional)",
+    "communityName": "Community Name",
+    "slug": "Slug",
+    "communityDescription": "Community Description",
+    "isPublic": "Public Community",
+    "joinPolicy": "Join Policy",
+    "requiresLightningAddress": "Requires Lightning Address",
+    "requiresNostrPubkey": "Requires Nostr Pubkey"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "usernameTaken": "Username already taken",
+    "slugTaken": "Slug already taken",
+    "unauthorized": "Unauthorized",
+    "notFound": "Not found",
+    "serverError": "Server error"
+  },
+  "success": {
+    "communityCreated": "Community created successfully",
+    "joinedCommunity": "Joined community successfully",
+    "eventCreated": "Event created successfully",
+    "pollCreated": "Poll created successfully",
+    "voted": "Vote submitted successfully"
+  }
+}
