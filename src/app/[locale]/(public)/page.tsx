@@ -7,6 +7,7 @@ import { LanguageToggle } from '@/components/language-toggle'
 
 export default function HomePage() {
   const t = useTranslations('common')
+  const tNav = useTranslations('nav')
   const locale = useLocale()
 
   return (
@@ -22,17 +23,17 @@ export default function HomePage() {
           <nav className="flex items-center space-x-4">
             <Link href={`/${locale}/discover`}>
               <Button variant="ghost" className="hover-lift delay-300">
-                {t('discover')} 🔍
+                {tNav('discover')} 🔍
               </Button>
             </Link>
             <Link href={`/${locale}/sign-in`}>
               <Button variant="outline" className="hover-glow delay-400">
-                {t('signIn')} 👤
+                {tNav('signIn')} 👤
               </Button>
             </Link>
             <Link href={`/${locale}/create`}>
               <Button className="hover-lift animate-pulse delay-500">
-                {t('create')} ✨
+                {tNav('create')} ✨
               </Button>
             </Link>
             <ThemeToggle />
@@ -122,7 +123,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm mt-20 animate-fade-in-up delay-900">
         <div className="container mx-auto px-4 py-8 text-center text-gray-600 dark:text-gray-300">
-          <p className="animate-float">
+          <p>
             {t('copyright')} 💜
           </p>
         </div>

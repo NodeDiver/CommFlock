@@ -22,10 +22,7 @@
     "toggleTheme": "Cambiar tema",
     "language": "Idioma",
     "english": "Inglés",
-    "spanish": "Español",
-    "discover": "Descubrir",
-    "signIn": "Iniciar Sesión",
-    "create": "Crear"
+    "spanish": "Español"
   },
   "nav": {
     "signIn": "Iniciar Sesión",
