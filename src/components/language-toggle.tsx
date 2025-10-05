@@ -21,10 +21,12 @@ export function LanguageToggle() {
   const t = useTranslations('common')
 
   const switchLocale = (newLocale: string) => {
-    // Remove current locale from pathname
+    // Remove current locale from pathname and ensure we have the correct path
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '') || '/'
     const newPath = `/${newLocale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
-    router.push(newPath)
+    
+    // Force a hard navigation to ensure the locale change is processed
+    window.location.href = newPath
   }
 
   return (
