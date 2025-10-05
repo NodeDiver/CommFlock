@@ -9,7 +9,9 @@
     "lint": "eslint",
     "prisma:studio": "prisma studio",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
+    "db:reset": "prisma migrate reset",
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {

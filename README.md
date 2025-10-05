@@ -27,7 +27,7 @@ CommFlock is a community/groups platform where users sign in with a username (em
 ### Prerequisites
 
 - Node.js 18+ 
-- PostgreSQL 14+
+- PostgreSQL 14+ (for local development)
 - npm or pnpm
 
 ### Installation
@@ -50,21 +50,27 @@ cp env.example .env
 
 Edit `.env` with your database credentials:
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/commflock?schema=public"
+# For local development (SQLite)
+DATABASE_URL="file:./dev.db"
+
+# For production (Neon PostgreSQL)
+# DATABASE_URL="postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true"
+# DIRECT_URL="postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require"
+
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="dev-secret-change-later"
 ```
 
 4. Set up the database:
 ```bash
-# Create the database
-createdb commflock
-
 # Run migrations
 npm run db:migrate
 
 # Generate Prisma client
 npm run db:generate
+
+# Seed the database (optional)
+npm run seed
 ```
 
 5. Start the development server:
@@ -73,6 +79,54 @@ npm run dev
 ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Deploying to Netlify + Neon
+
+### Prerequisites for Deployment
+
+- [Neon](https://neon.tech/) account (free tier available)
+- [Netlify](https://netlify.com/) account (free tier available)
+
+### 1. Set up Neon Database
+
+1. Create a new project in [Neon Console](https://console.neon.tech/)
+2. Copy your connection strings:
+   - **Pooled URL** (for runtime): `postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true`
+   - **Direct URL** (for migrations): `postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require`
+
+### 2. Deploy to Netlify
+
+1. Connect your GitHub repository to Netlify
+2. Set environment variables in Netlify dashboard:
+   ```
+   DATABASE_URL=postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true
+   DIRECT_URL=postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require
+   NEXTAUTH_URL=https://your-site.netlify.app
+   NEXTAUTH_SECRET=your-secret-key-here
+   ```
+3. Deploy! Netlify will automatically:
+   - Run `prisma migrate deploy`
+   - Generate Prisma client
+   - Build the Next.js app
+   - Deploy using OpenNext
+
+### 3. Post-Deployment
+
+1. **Health Check**: Visit `https://your-site.netlify.app/api/health`
+2. **Database Test**: Create a test community
+3. **Authentication**: Test sign-in functionality
+4. **i18n**: Verify language switching works
+
+### Smoke Test Checklist
+
+- [ ] Health endpoint returns 200
+- [ ] Database connection successful
+- [ ] Home page loads correctly
+- [ ] Language switching works (/en ↔ /es)
+- [ ] Community creation works
+- [ ] Authentication flow works
+- [ ] Images load properly
+- [ ] API routes respond correctly
 
 ## Project Structure
 
