@@ -17,6 +17,10 @@ const geistMono = Geist_Mono({
 
 const locales = ['en', 'es']
 
+export function generateStaticParams() {
+  return [{locale: 'en'}, {locale: 'es'}];
+}
+
 export default async function LocaleLayout({
   children,
   params
@@ -29,9 +33,11 @@ export default async function LocaleLayout({
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) notFound()
 
+  // Note: unstable_setRequestLocale is not available in this version of next-intl
+  
   // Providing all messages to the client
   // side is the easiest way to get started
-  const messages = await getMessages()
+  const messages = await getMessages({ locale })
 
   return (
     <html lang={locale} suppressHydrationWarning>

@@ -1,14 +1,21 @@
-import { useTranslations, useLocale } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageToggle } from '@/components/language-toggle'
 
-export default function HomePage() {
-  const t = useTranslations('common')
-  const tNav = useTranslations('nav')
-  const locale = useLocale()
+export default async function HomePage({
+  params
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  
+  // Load messages manually to avoid getRequestConfig issues
+  const messages = (await import(`../../../messages/${locale}.json`)).default
+  const t = (key: string) => messages.common[key]
+  const tNav = (key: string) => messages.nav[key]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 animate-gradient">
@@ -20,22 +27,22 @@ export default function HomePage() {
               CommFlock ⚡
             </h1>
           </div>
-          <nav className="flex items-center space-x-4">
-            <Link href={`/${locale}/discover`}>
-              <Button variant="ghost" className="hover-lift delay-300">
-                {tNav('discover')} 🔍
-              </Button>
-            </Link>
-            <Link href={`/${locale}/sign-in`}>
-              <Button variant="outline" className="hover-glow delay-400">
-                {tNav('signIn')} 👤
-              </Button>
-            </Link>
-            <Link href={`/${locale}/create`}>
-              <Button className="hover-lift animate-pulse delay-500">
-                {tNav('create')} ✨
-              </Button>
-            </Link>
+              <nav className="flex items-center space-x-4">
+                <Link href={`/${locale}/discover`}>
+                  <Button variant="ghost" className="hover-lift delay-300">
+                    {tNav('discover')} 🔍
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/sign-in`}>
+                  <Button variant="outline" className="hover-glow delay-400">
+                    {tNav('signIn')} 👤
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/create`}>
+                  <Button className="hover-lift animate-pulse delay-500">
+                    {tNav('create')} ✨
+                  </Button>
+                </Link>
             <ThemeToggle />
             <LanguageToggle />
           </nav>
@@ -54,18 +61,18 @@ export default function HomePage() {
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 animate-fade-in-up delay-400 text-shadow">
             {t('communityPlatform')} 🚀
           </p>
-          <div className="flex justify-center space-x-4 animate-fade-in-up delay-500">
-            <Link href={`/${locale}/create`}>
-              <Button size="lg" className="px-8 hover-lift hover-glow animate-pulse">
-                {t('createCommunity')} ⚡
-              </Button>
-            </Link>
-            <Link href={`/${locale}/discover`}>
-              <Button size="lg" variant="outline" className="px-8 hover-lift hover-scale">
-                {t('exploreCommunities')} 🔍
-              </Button>
-            </Link>
-          </div>
+              <div className="flex justify-center space-x-4 animate-fade-in-up delay-500">
+                <Link href={`/${locale}/create`}>
+                  <Button size="lg" className="px-8 hover-lift hover-glow animate-pulse">
+                    {t('createCommunity')} ⚡
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/discover`}>
+                  <Button size="lg" variant="outline" className="px-8 hover-lift hover-scale">
+                    {t('exploreCommunities')} 🔍
+                  </Button>
+                </Link>
+              </div>
         </div>
 
         {/* Features */}
