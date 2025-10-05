@@ -1,0 +1,227 @@
+// Fallback schema for SQLite when Neon credentials are not available
+// This file is used when DATABASE_URL points to a SQLite file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum MemberStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  LEFT
+}
+
+enum CommunityJoinPolicy {
+  AUTO_JOIN
+  APPROVAL_REQUIRED
+  CLOSED
+}
+
+enum EventStatus {
+  DRAFT
+  OPEN
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID_SIMULATED
+  REFUNDED
+  CANCELLED
+}
+
+model User {
+  id                String   @id @default(cuid())
+  username          String   @unique
+  email             String?  @unique
+  lightningAddress  String?
+  nostrPubkey       String?
+  createdAt         DateTime @default(now())
+  memberships       CommunityMember[]
+  badges            UserBadge[]
+  payments          Payment[]
+  votes             PollVote[]
+  communities       Community[]
+  announcements     Announcement[]
+  polls             Poll[]
+  events            Event[]
+  registrations     EventRegistration[]
+}
+
+model Community {
+  id                        String                @id @default(cuid())
+  name                      String
+  slug                      String                @unique
+  description               String?
+  isPublic                  Boolean               @default(true)
+  joinPolicy                CommunityJoinPolicy   @default(AUTO_JOIN)
+  requiresLightningAddress  Boolean               @default(false)
+  requiresNostrPubkey       Boolean               @default(false)
+  ownerId                   String
+  owner                     User                  @relation(fields: [ownerId], references: [id])
+  createdAt                 DateTime              @default(now())
+  members                   CommunityMember[]
+  announcements             Announcement[]
+  polls                     Poll[]
+  events                    Event[]
+  badges                    Badge[]
+  crowdfunds                CrowdfundingGoal[]
+  payments                  Payment[]
+}
+
+model CommunityMember {
+  userId       String
+  communityId  String
+  role         MemberRole   @default(MEMBER)
+  status       MemberStatus @default(APPROVED)
+  points       Int          @default(0)
+  joinedAt     DateTime     @default(now())
+
+  user         User         @relation(fields: [userId], references: [id])
+  community    Community    @relation(fields: [communityId], references: [id])
+
+  @@id([userId, communityId])
+  @@index([communityId, status])
+}
+
+model Badge {
+  id           String     @id @default(cuid())
+  communityId  String
+  name         String
+  description  String?
+  icon         String?
+  createdAt    DateTime   @default(now())
+
+  community    Community  @relation(fields: [communityId], references: [id])
+  awarded      UserBadge[]
+}
+
+model UserBadge {
+  userId   String
+  badgeId  String
+  awardedAt DateTime @default(now())
+
+  user     User   @relation(fields: [userId], references: [id])
+  badge    Badge  @relation(fields: [badgeId], references: [id])
+
+  @@id([userId, badgeId])
+}
+
+model Announcement {
+  id           String     @id @default(cuid())
+  communityId  String
+  title        String
+  body         String
+  createdById  String
+  createdAt    DateTime   @default(now())
+
+  community    Community  @relation(fields: [communityId], references: [id])
+  createdBy    User       @relation(fields: [createdById], references: [id])
+}
+
+model Poll {
+  id           String     @id @default(cuid())
+  communityId  String
+  question     String
+  // JSON array of { key: string, label: string }
+  options      Json?
+  endsAt       DateTime?
+  visibleVotes Boolean    @default(true) // show who voted
+  createdById  String
+  createdAt    DateTime   @default(now())
+
+  community    Community  @relation(fields: [communityId], references: [id])
+  createdBy    User       @relation(fields: [createdById], references: [id])
+  votes        PollVote[]
+}
+
+model PollVote {
+  id        String   @id @default(cuid())
+  pollId    String
+  userId    String
+  optionKey String
+  createdAt DateTime @default(now())
+
+  poll      Poll     @relation(fields: [pollId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([pollId, userId])
+}
+
+model Event {
+  id           String      @id @default(cuid())
+  communityId  String
+  title        String
+  startsAt     DateTime
+  endsAt       DateTime
+  capacity     Int
+  priceSats    Int         @default(0)
+  minQuorum    Int         @default(0)
+  status       EventStatus @default(DRAFT)
+  createdById  String
+  createdAt    DateTime    @default(now())
+
+  community    Community   @relation(fields: [communityId], references: [id])
+  createdBy    User        @relation(fields: [createdById], references: [id])
+  registrations EventRegistration[]
+  payments     Payment[]
+}
+
+model EventRegistration {
+  id         String    @id @default(cuid())
+  eventId    String
+  userId     String
+  status     String    @default("reserved") // reserved/paid/cancelled/refunded (text for flexibility)
+  paymentId  String?
+  createdAt  DateTime  @default(now())
+
+  event      Event     @relation(fields: [eventId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  payment    Payment?  @relation(fields: [paymentId], references: [id])
+}
+
+model CrowdfundingGoal {
+  id           String    @id @default(cuid())
+  communityId  String
+  title        String
+  targetSats   Int
+  deadline     DateTime
+  status       String    @default("open") // open/confirmed/cancelled/expired
+  raisedSats   Int       @default(0)
+  createdAt    DateTime  @default(now())
+
+  community    Community @relation(fields: [communityId], references: [id])
+  payments     Payment[]
+}
+
+model Payment {
+  id             String         @id @default(cuid())
+  userId         String
+  communityId    String?
+  eventId        String?
+  crowdfundId    String?
+  amountSats     Int
+  status         PaymentStatus  @default(PAID_SIMULATED)
+  providerMeta   Json?
+  createdAt      DateTime       @default(now())
+
+  user           User           @relation(fields: [userId], references: [id])
+  community      Community?     @relation(fields: [communityId], references: [id])
+  event          Event?         @relation(fields: [eventId], references: [id])
+  crowdfund      CrowdfundingGoal? @relation(fields: [crowdfundId], references: [id])
+  registrations  EventRegistration[]
+}

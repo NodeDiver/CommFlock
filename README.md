@@ -49,14 +49,18 @@ cp env.example .env
 ```
 
 Edit `.env` with your database credentials:
+
+**For open source contributors (SQLite):**
 ```env
-# For local development (SQLite)
 DATABASE_URL="file:./dev.db"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="dev-secret-change-later"
+```
 
-# For production (Neon PostgreSQL)
-# DATABASE_URL="postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true"
-# DIRECT_URL="postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require"
-
+**For shared development (Neon PostgreSQL):**
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true"
+DIRECT_URL="postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="dev-secret-change-later"
 ```

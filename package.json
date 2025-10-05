@@ -12,6 +12,7 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:reset": "prisma migrate reset",
+    "db:setup": "npm run db:generate && npm run db:migrate && npm run seed",
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
