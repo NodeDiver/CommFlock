@@ -30,7 +30,7 @@ export default function SignInPage() {
       })
 
       if (result?.ok) {
-        router.push('/discover')
+        router.push(`/${locale}/discover`)
       } else {
         console.error('Sign in failed')
       }
@@ -79,6 +79,9 @@ export default function SignInPage() {
             </Button>
           </form>
           <div className="mt-6 text-center space-y-2">
+            <Link href={`/${locale}/forgot-password`} className="text-sm text-blue-600 hover:underline block">
+              Forgot password?
+            </Link>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
               <Link href={`/${locale}/sign-up`} className="text-blue-600 hover:underline font-medium">

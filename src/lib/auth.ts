@@ -28,11 +28,21 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
-          // User exists, verify password
+          // BACKWARDS COMPATIBILITY: Handle legacy users without passwords
+          // This allows users created before password feature to still sign in
+          // TODO: Prompt these users to set a password in their profile
           if (!user.hashedPassword) {
-            return null // User exists but has no password (invalid state)
+            console.warn(`Legacy user sign-in (no password): ${user.username}`)
+            return {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              // Note: Could add a flag here to show "Set Password" prompt in UI
+              // requiresPasswordSetup: true
+            }
           }
-          
+
+          // Verify password for users with passwords
           const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
           if (!isValidPassword) {
             return null // Invalid password
@@ -71,6 +81,5 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/sign-in',
-    signUp: '/sign-up',
   },
 }

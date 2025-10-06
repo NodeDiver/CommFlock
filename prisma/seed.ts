@@ -1,21 +1,25 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('Seeding database...')
 
-  // Create demo user
+  // Create demo user with password
+  const demoPassword = await bcrypt.hash('demo1234', 12)
   const demoUser = await prisma.user.upsert({
     where: { username: 'demo' },
     update: {},
     create: {
       username: 'demo',
       email: 'demo@commflock.com',
+      hashedPassword: demoPassword,
     },
   })
 
   console.log('Created demo user:', demoUser.username)
+  console.log('Demo credentials: username=demo, password=demo1234')
 
   // Create demo community
   const demoCommunity = await prisma.community.upsert({

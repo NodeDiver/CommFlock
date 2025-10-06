@@ -1,11 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import bcrypt from 'bcrypt'
+import { checkRateLimit, getIdentifier } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
+  // Apply strict rate limiting (3 per hour)
+  const identifier = getIdentifier(request)
+  const rateLimitResult = await checkRateLimit(identifier, 'strict')
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      {
+        error: 'Too many signup attempts. Please try again later.',
+        retryAfter: new Date(rateLimitResult.reset).toISOString(),
+      },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+          'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+          'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+          'Retry-After': Math.ceil(
+            (rateLimitResult.reset - Date.now()) / 1000
+          ).toString(),
+        },
+      }
+    )
+  }
+
   try {
     const body = await request.json()
-    console.log('Signup request body:', body)
+    // Security: Don't log passwords or sensitive data
+    console.log('Signup request:', {
+      username: body.username,
+      email: body.email || '(not provided)',
+      hasLightningAddress: !!body.lightningAddress,
+      hasNostrPubkey: !!body.nostrPubkey
+    })
     
     // Basic validation
     if (!body.username || !body.password) {
@@ -93,8 +124,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Signup error:', error)
+    // Security: Don't expose internal error details to client
     return NextResponse.json(
-      { error: 'Internal server error', details: error.message },
+      { error: 'Internal server error. Please try again later.' },
       { status: 500 }
     )
   }

@@ -134,7 +134,7 @@ export default function PollPage() {
     )
   }
 
-  const isExpired = poll.endsAt && new Date(poll.endsAt) < new Date()
+  const isExpired = !!(poll.endsAt && new Date(poll.endsAt) < new Date())
 
   return (
     <div className="min-h-screen bg-gray-50">
