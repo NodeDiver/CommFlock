@@ -24,17 +24,26 @@ export default function CreateCommunityPage() {
   const [requiresNostrPubkey, setRequiresNostrPubkey] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
 
   const { data: session } = useSession()
   const router = useRouter()
   const t = useTranslations()
 
-  // Auto-generate slug from name
+  // Auto-generate slug from name in real-time
   const handleNameChange = (value: string) => {
     setName(value)
-    if (!slug) {
+    // Only auto-update slug if user hasn't manually edited it
+    if (!isSlugManuallyEdited) {
       setSlug(generateSlug(value))
     }
+  }
+
+  // Handle manual slug changes
+  const handleSlugChange = (value: string) => {
+    setSlug(value)
+    // Mark as manually edited to stop auto-updates
+    setIsSlugManuallyEdited(true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -141,13 +150,25 @@ export default function CreateCommunityPage() {
                   <Input
                     id="slug"
                     value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
+                    onChange={(e) => handleSlugChange(e.target.value)}
                     required
                     placeholder="community-slug"
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    This will be your community URL: commflock.com/{slug}
-                  </p>
+                  <div className="mt-1 space-y-1">
+                    <p className="text-sm text-gray-500">
+                      This will be your community URL: commflock.com/{slug}
+                    </p>
+                    {!isSlugManuallyEdited && name && (
+                      <p className="text-xs text-blue-600 dark:text-blue-400">
+                        ✨ Auto-generated from community name
+                      </p>
+                    )}
+                    {isSlugManuallyEdited && (
+                      <p className="text-xs text-orange-600 dark:text-orange-400">
+                        ✏️ Manually edited - will not auto-update
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div>

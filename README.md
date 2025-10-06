@@ -1,11 +1,13 @@
 # CommFlock
 
-CommFlock is a community/groups platform where users sign in with a username (email optional), discover or create communities, and coordinate activities. Communities can be public or private, auto-join or approval-required. Each community has announcements, activity, events with capacity control, simple votes, a leaderboard, and owner-defined badges. Payments are Lightning-first via NWC (phase 2); in phase 1 we simulate payments so flows are testable. Multi-tenant by slug (e.g., project.com/gordosbala). i18n en/es from day one. Built with Next.js (App Router), Prisma/Postgres, Auth.js, and shadcn/ui.
+CommFlock is a community/groups platform where users sign in with a username (email optional), optionally provide Lightning Address and Nostr Pubkey for enhanced functionality, discover or create communities, and coordinate activities. Communities can be public or private, auto-join or approval-required. Each community has announcements, activity, events with capacity control, simple votes, a leaderboard, and owner-defined badges. Payments are Lightning-first via NWC (phase 2); in phase 1 we simulate payments so flows are testable. Multi-tenant by slug (e.g., project.com/gordosbala). i18n en/es from day one. Built with Next.js (App Router), Prisma/Postgres, Auth.js, and shadcn/ui.
 
 ## Features
 
 - **Multi-tenant Communities**: Each community has its own space with custom settings and policies
 - **Lightning Payments**: Built-in Lightning Network support for community creation and event payments (simulated in v1)
+- **Lightning Address Integration**: Users can optionally provide Lightning addresses for seamless payments
+- **Nostr Integration**: Users can optionally provide Nostr public keys for decentralized identity
 - **Events & Polls**: Coordinate activities with events, polls, and community announcements
 - **Flexible Join Policies**: Auto-join, approval-required, or closed communities
 - **Member Management**: Points, badges, and leaderboards

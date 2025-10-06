@@ -100,6 +100,8 @@
   "forms": {
     "username": "Username",
     "email": "Email (Optional)",
+    "lightningAddress": "Lightning Address (Optional)",
+    "nostrPubkey": "Nostr Public Key (Optional)",
     "communityName": "Community Name",
     "slug": "Slug",
     "communityDescription": "Community Description",

@@ -4,14 +4,22 @@ This document outlines the planned features and improvements for CommFlock.
 
 ## Immediate Fixes
 
-- [ ] Restore the required `<html>`/`<body>` structure in `src/app/layout.tsx` so Next.js can render the tree without hitting the “Root layout must return html/body tags” runtime error.
-- [ ] Correct the translation loader import in `src/lib/i18n.ts` (point it at `src/messages`) to eliminate the `Failed to load Intl messages` exception on every request.
-- [ ] Make every navigation path locale-aware: update `router.push`/`Link` calls in the auth, discover, create, and community pages plus `pages.signIn/pages.signUp` in `src/lib/auth.ts` so they reuse the active locale instead of 404ing on `/sign-in`.
-- [ ] Convert `src/app/[locale]/(public)/page.tsx` to a client component (or refactor to a server-safe pattern) so that using `useTranslations`/`useLocale` doesn’t trigger the “Hooks can only be used in client components” build failure.
+- [x] Restore the required `<html>`/`<body>` structure in `src/app/layout.tsx` so Next.js can render the tree without hitting the "Root layout must return html/body tags" runtime error.
+- [x] Correct the translation loader import in `src/lib/i18n.ts` (point it at `src/messages`) to eliminate the `Failed to load Intl messages` exception on every request.
+- [x] Make every navigation path locale-aware: update `router.push`/`Link` calls in the auth, discover, create, and community pages plus `pages.signIn/pages.signUp` in `src/lib/auth.ts` so they reuse the active locale instead of 404ing on `/sign-in`.
+- [x] Convert `src/app/[locale]/(public)/page.tsx` to a client component (or refactor to a server-safe pattern) so that using `useTranslations`/`useLocale` doesn't trigger the "Hooks can only be used in client components" build failure.
 - [ ] Add the missing invariants in the API layer: confirm the community slug before registering for an event, run `joinCommunitySchema`/new Zod checks in the members endpoint, and replace the `any` payloads with typed objects.
-- [ ] Align `createCommunitySchema` with `POST /api/communities` so the slug can be optional when the server generates it via `generateSlug`.
-- [ ] Replace the hard-coded English UI strings in the sign-in/up, discover, community, and admin pages with `next-intl` keys to keep both locales in sync.
+- [x] Align `createCommunitySchema` with `POST /api/communities` so the slug can be optional when the server generates it via `generateSlug`.
+- [x] Replace the hard-coded English UI strings in the sign-in/up, discover, community, and admin pages with `next-intl` keys to keep both locales in sync.
 - [ ] Fill in or remove the admin quick links that point to non-existent routes (`/[slug]/admin/announcements`, `events`, `polls`) to prevent broken navigation.
+
+## Recently Completed
+
+- [x] **User Authentication Enhancement**: Added optional Lightning Address and Nostr Pubkey fields to user registration
+- [x] **Real-time Slug Generation**: Implemented automatic slug generation from community names with user override capability
+- [x] **Database Schema Updates**: Verified and confirmed database properly handles new user fields
+- [x] **Form Validation**: Added client and server-side validation for Lightning Address and Nostr Pubkey formats
+- [x] **Internationalization**: Added translations for new form fields in both English and Spanish
 
 ## Phase 2 - Enhanced Authentication
 
@@ -26,8 +34,8 @@ This document outlines the planned features and improvements for CommFlock.
 ### User Profile Enhancements
 - [ ] Profile pictures and avatars
 - [ ] User bio and social links
-- [ ] Lightning address management
-- [ ] Nostr pubkey management
+- [x] Lightning address management (basic support added)
+- [x] Nostr pubkey management (basic support added)
 - [ ] Privacy settings
 
 ## Phase 2 - Real Lightning Payments
@@ -212,7 +220,8 @@ This document outlines the planned features and improvements for CommFlock.
 
 **Phase 1 (Current)**: Basic community platform with simulated payments
 - ✅ User authentication (username-based)
-- ✅ Community creation and management
+- ✅ Optional Lightning Address and Nostr Pubkey support
+- ✅ Community creation and management with real-time slug generation
 - ✅ Public community pages
 - ✅ Basic event and poll creation
 - ✅ Internationalization (en/es)

@@ -59,7 +59,7 @@ src/
 ## Database Schema
 
 Key models:
-- **User**: Users with username and optional email
+- **User**: Users with username, optional email, Lightning Address, and Nostr Pubkey
 - **Community**: Multi-tenant communities with various settings
 - **CommunityMember**: User memberships with roles and status
 - **Event**: Community events with capacity and pricing
@@ -68,7 +68,8 @@ Key models:
 
 ## Authentication
 
-- **Development only**: Username-based login (no passwords)
+- **Username and password**: Users sign up with username and password
+- **Optional fields**: Email, Lightning Address, and Nostr Pubkey during registration
 - **Session strategy**: JWT tokens
 - **Protected routes**: Use middleware for route protection
 - **Role-based access**: OWNER, ADMIN, MEMBER roles
@@ -119,6 +120,14 @@ Before submitting a pull request, ensure:
 - **Database queries**: Optimize Prisma queries with proper includes
 - **Image optimization**: Use Next.js Image component
 - **Bundle size**: Monitor bundle size with Next.js analyzer
+
+## Recent Updates
+
+- **Real-time Slug Generation**: Community creation now automatically generates slugs from names with user override capability
+- **Enhanced User Registration**: Added optional Lightning Address and Nostr Pubkey fields with format validation
+- **Form Validation**: Comprehensive client and server-side validation for new fields
+- **Internationalization**: All new features support both English and Spanish
+- **Database Integration**: Verified database schema properly handles new user fields
 
 ## Roadmap
 

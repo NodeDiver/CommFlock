@@ -22,6 +22,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate Lightning Address format (if provided)
+    if (body.lightningAddress && !body.lightningAddress.includes('@') && !body.lightningAddress.startsWith('lnurl')) {
+      return NextResponse.json(
+        { error: 'Lightning address should be in format: yourname@domain.com or lnurl...' },
+        { status: 400 }
+      )
+    }
+
+    // Validate Nostr Pubkey format (if provided)
+    if (body.nostrPubkey && !body.nostrPubkey.startsWith('npub1')) {
+      return NextResponse.json(
+        { error: 'Nostr public key should start with npub1' },
+        { status: 400 }
+      )
+    }
+
     // Check if username already exists
     const existingUser = await db.user.findUnique({
       where: { username: body.username },
@@ -57,6 +73,8 @@ export async function POST(request: NextRequest) {
         username: body.username,
         email: body.email || null,
         hashedPassword,
+        lightningAddress: body.lightningAddress || null,
+        nostrPubkey: body.nostrPubkey || null,
       },
     })
 
@@ -69,6 +87,8 @@ export async function POST(request: NextRequest) {
         id: user.id,
         username: user.username,
         email: user.email,
+        lightningAddress: user.lightningAddress,
+        nostrPubkey: user.nostrPubkey,
       },
     })
   } catch (error) {

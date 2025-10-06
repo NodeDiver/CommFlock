@@ -15,6 +15,8 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [lightningAddress, setLightningAddress] = useState('')
+  const [nostrPubkey, setNostrPubkey] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -36,6 +38,18 @@ export default function SignUpPage() {
       setError('Password must be at least 6 characters long')
       return
     }
+    
+    // Validate Lightning Address format (if provided)
+    if (lightningAddress && !lightningAddress.includes('@') && !lightningAddress.startsWith('lnurl')) {
+      setError('Lightning address should be in format: yourname@domain.com or lnurl...')
+      return
+    }
+    
+    // Validate Nostr Pubkey format (if provided)
+    if (nostrPubkey && !nostrPubkey.startsWith('npub1')) {
+      setError('Nostr public key should start with npub1')
+      return
+    }
 
     setIsLoading(true)
 
@@ -50,6 +64,8 @@ export default function SignUpPage() {
           username,
           email: email || undefined,
           password,
+          lightningAddress: lightningAddress || undefined,
+          nostrPubkey: nostrPubkey || undefined,
         }),
       })
 
@@ -139,6 +155,35 @@ export default function SignUpPage() {
                 placeholder="Confirm your password"
               />
             </div>
+            
+            <div>
+              <Label htmlFor="lightningAddress">{t('forms.lightningAddress')}</Label>
+              <Input
+                id="lightningAddress"
+                type="text"
+                value={lightningAddress}
+                onChange={(e) => setLightningAddress(e.target.value)}
+                placeholder="yourname@domain.com or lnurl..."
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Your Lightning address for receiving payments
+              </p>
+            </div>
+            
+            <div>
+              <Label htmlFor="nostrPubkey">{t('forms.nostrPubkey')}</Label>
+              <Input
+                id="nostrPubkey"
+                type="text"
+                value={nostrPubkey}
+                onChange={(e) => setNostrPubkey(e.target.value)}
+                placeholder="npub1..."
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Your Nostr public key for decentralized identity
+              </p>
+            </div>
+            
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
