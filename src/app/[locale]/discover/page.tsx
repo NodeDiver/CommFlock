@@ -78,10 +78,10 @@ export default function DiscoverPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Discover Communities
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Find and join communities that interest you
           </p>
         </div>
@@ -137,7 +137,7 @@ export default function DiscoverPage() {
 
         {communities.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No communities found</p>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">No communities found</p>
             {session && (
               <Link href={`/${locale}/create`}>
                 <Button>Create First Community</Button>

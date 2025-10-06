@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,10 +12,11 @@ import Link from 'next/link'
 
 export default function SignInPage() {
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const t = useTranslations()
+  const locale = useLocale()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,7 +25,7 @@ export default function SignInPage() {
     try {
       const result = await signIn('credentials', {
         username,
-        email: email || undefined,
+        password,
         redirect: false,
       })
 
@@ -46,7 +47,7 @@ export default function SignInPage() {
         <CardHeader>
           <CardTitle>Sign In to CommFlock</CardTitle>
           <CardDescription>
-            Enter your username to sign in or create a new account
+            Enter your username and password to sign in
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,21 +64,28 @@ export default function SignInPage() {
               />
             </div>
             <div>
-              <Label htmlFor="email">{t('forms.email')}</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email (optional)"
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Enter your password"
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-          <div className="mt-4 text-center">
-            <Link href="/" className="text-sm text-blue-600 hover:underline">
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Don't have an account?{' '}
+              <Link href={`/${locale}/sign-up`} className="text-blue-600 hover:underline font-medium">
+                Create a new account here
+              </Link>
+            </p>
+            <Link href="/" className="text-sm text-gray-500 hover:underline">
               Back to Home
             </Link>
           </div>

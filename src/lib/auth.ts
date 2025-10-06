@@ -10,26 +10,32 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         username: { label: 'Username', type: 'text' },
         email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.username) {
+        if (!credentials?.username || !credentials?.password) {
           return null
         }
 
         try {
-          // Try to find existing user by username
-          let user = await db.user.findUnique({
+          // Find existing user by username
+          const user = await db.user.findUnique({
             where: { username: credentials.username },
           })
 
-          // If user doesn't exist, create new user
           if (!user) {
-            user = await db.user.create({
-              data: {
-                username: credentials.username,
-                email: credentials.email || null,
-              },
-            })
+            // User doesn't exist, return null (sign-up should be handled separately)
+            return null
+          }
+
+          // User exists, verify password
+          if (!user.hashedPassword) {
+            return null // User exists but has no password (invalid state)
+          }
+          
+          const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
+          if (!isValidPassword) {
+            return null // Invalid password
           }
 
           return {

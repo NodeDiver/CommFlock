@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['localhost'],
     unoptimized: false
-  },
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client']
   }
 };
 

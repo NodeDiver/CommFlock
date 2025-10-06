@@ -10,6 +10,18 @@ const intlMiddleware = createMiddleware({
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
+  console.log('🔍 Middleware processing:', pathname)
+  
+  // Skip static assets
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/api/') ||
+    pathname.match(/\.(svg|png|jpg|jpeg|gif|ico|css|js)$/)
+  ) {
+    console.log('✅ Skipping static asset:', pathname)
+    return NextResponse.next()
+  }
+
   // Check if the path looks like a community slug (not starting with /en or /es)
   // and not an API route or static file
   if (
@@ -40,6 +52,7 @@ export const config = {
     // - _next/static (static files)
     // - _next/image (image optimization files)
     // - favicon.ico (favicon file)
+    // - Static assets
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ]
 }

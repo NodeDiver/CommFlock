@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeScript } from '@/components/theme-script'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 import { Geist, Geist_Mono } from "next/font/google"
 
 const geistSans = Geist({
@@ -49,7 +51,13 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <Providers messages={messages} locale={locale}>
-          {children}
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
           <Toaster />
         </Providers>
       </body>

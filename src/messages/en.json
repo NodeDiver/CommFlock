@@ -30,7 +30,9 @@
     "discover": "Discover",
     "create": "Create",
     "dashboard": "Dashboard",
-    "admin": "Admin"
+    "admin": "Admin",
+    "features": "Features",
+    "quickLinks": "Quick Links"
   },
   "community": {
     "public": "Public",

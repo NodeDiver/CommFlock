@@ -2,8 +2,6 @@ import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { LanguageToggle } from '@/components/language-toggle'
 
 export default async function HomePage({
   params
@@ -18,44 +16,9 @@ export default async function HomePage({
   const tNav = (key: string) => messages.nav[key]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 animate-gradient">
-      {/* Header */}
-      <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm animate-fade-in-down">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <img 
-              src="/logo.svg" 
-              alt="CommFlock" 
-              className="h-10 w-10 hover-scale animate-bounce delay-200"
-            />
-            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover-scale">
-              CommFlock
-            </h1>
-          </div>
-              <nav className="flex items-center space-x-4">
-                <Link href={`/${locale}/discover`}>
-                  <Button variant="ghost" className="hover-lift delay-300">
-                    {tNav('discover')} 🔍
-                  </Button>
-                </Link>
-                <Link href={`/${locale}/sign-in`}>
-                  <Button variant="outline" className="hover-glow delay-400">
-                    {tNav('signIn')} 👤
-                  </Button>
-                </Link>
-                <Link href={`/${locale}/create`}>
-                  <Button className="hover-lift animate-pulse delay-500">
-                    {tNav('create')} ✨
-                  </Button>
-                </Link>
-            <ThemeToggle />
-            <LanguageToggle />
-          </nav>
-        </div>
-      </header>
-
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 animate-gradient">
       {/* Hero Section */}
-      <main className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6 animate-fade-in-up delay-200">
             {t('buildCommunities')}{' '}
@@ -130,16 +93,7 @@ export default async function HomePage({
             </CardContent>
           </Card>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm mt-20 animate-fade-in-up delay-900">
-        <div className="container mx-auto px-4 py-8 text-center text-gray-600 dark:text-gray-300">
-          <p>
-            {t('copyright')} 💜
-          </p>
-        </div>
-      </footer>
+      </div>
     </div>
   )
 }
