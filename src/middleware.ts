@@ -30,10 +30,6 @@ export default function middleware(request: NextRequest) {
     return intlResponse;
   }
 
-  // Get the pathname after locale processing
-  const newPathname =
-    intlResponse.headers.get("x-middleware-request-url") || pathname;
-
   // Check if the path looks like a community slug (after locale is added)
   // Pattern: /[locale]/[slug] where slug doesn't match known routes
   const knownRoutes = [
