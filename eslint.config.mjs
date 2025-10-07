@@ -17,7 +17,11 @@ const eslintConfig = [
       ".next/**",
       "out/**",
       "build/**",
+      "dist/**",
       "next-env.d.ts",
+      "sentry.*.config.ts",
+      "instrumentation.ts",
+      "tests/api/auth.test.ts",
     ],
   },
   {
