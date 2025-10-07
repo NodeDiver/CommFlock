@@ -1,48 +1,66 @@
-import createMiddleware from 'next-intl/middleware'
-import { NextRequest, NextResponse } from 'next/server'
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware({
-  locales: ['en', 'es'],
-  defaultLocale: 'es',
-  localePrefix: 'always' // fuerza /en y /es
-})
+  locales: ["en", "es"],
+  defaultLocale: "en",
+  localePrefix: "always", // fuerza /en y /es
+});
 
 export default function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
-  console.log('🔍 Middleware processing:', pathname)
-  
+  const { pathname } = request.nextUrl;
+
+  console.log("🔍 Middleware processing:", pathname);
+
   // Skip static assets
   if (
-    pathname.startsWith('/_next/') ||
-    pathname.startsWith('/api/') ||
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/api/") ||
     pathname.match(/\.(svg|png|jpg|jpeg|gif|ico|css|js)$/)
   ) {
-    console.log('✅ Skipping static asset:', pathname)
-    return NextResponse.next()
+    console.log("✅ Skipping static asset:", pathname);
+    return NextResponse.next();
   }
 
-  // Check if the path looks like a community slug (not starting with /en or /es)
-  // and not an API route or static file
-  if (
-    pathname.startsWith('/') && 
-    !pathname.startsWith('/en/') && 
-    !pathname.startsWith('/es/') &&
-    !pathname.startsWith('/api/') &&
-    !pathname.startsWith('/_next/') &&
-    !pathname.startsWith('/favicon') &&
-    !pathname.includes('.') &&
-    pathname !== '/' &&
-    pathname.length > 1
-  ) {
-    // Redirect to English version by default
-    const url = request.nextUrl.clone()
-    url.pathname = `/en${pathname}`
-    return NextResponse.redirect(url)
+  // Apply intl middleware first to handle locale detection
+  const intlResponse = intlMiddleware(request);
+
+  // If intl middleware is redirecting, let it handle the request
+  if (intlResponse.status === 307 || intlResponse.status === 308) {
+    return intlResponse;
   }
-  
-  // Use the default intl middleware for other routes
-  return intlMiddleware(request)
+
+  // Get the pathname after locale processing
+  const newPathname =
+    intlResponse.headers.get("x-middleware-request-url") || pathname;
+
+  // Check if the path looks like a community slug (after locale is added)
+  // Pattern: /[locale]/[slug] where slug doesn't match known routes
+  const knownRoutes = [
+    "/discover",
+    "/sign-in",
+    "/sign-up",
+    "/forgot-password",
+    "/reset-password",
+  ];
+  const localeMatch = pathname.match(/^\/(en|es)(\/.*)?$/);
+
+  if (localeMatch) {
+    const afterLocale = localeMatch[2] || "";
+
+    // If path is like /en/something and something is not a known route
+    if (
+      afterLocale &&
+      afterLocale !== "/" &&
+      !knownRoutes.some((route) => afterLocale.startsWith(route)) &&
+      !afterLocale.startsWith("/api/")
+    ) {
+      // This might be a community slug, let it pass through
+      return intlResponse;
+    }
+  }
+
+  return intlResponse;
 }
 
 export const config = {
@@ -53,6 +71,6 @@ export const config = {
     // - _next/image (image optimization files)
     // - favicon.ico (favicon file)
     // - Static assets
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ]
-}
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};
