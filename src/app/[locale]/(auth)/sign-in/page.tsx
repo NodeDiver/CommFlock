@@ -21,12 +21,14 @@ export default function SignInPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
   const t = useTranslations();
   const locale = useLocale();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
 
     try {
@@ -39,10 +41,12 @@ export default function SignInPage() {
       if (result?.ok) {
         router.push(`/${locale}/discover`);
       } else {
-        logger.error("Sign in failed");
+        setError("Invalid username or password");
+        logger.error("Sign in failed", { username });
       }
     } catch (error) {
-      logger.error("Sign in error:", error);
+      setError("An error occurred. Please try again.");
+      logger.error("Sign in error", error);
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +63,11 @@ export default function SignInPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                {error}
+              </div>
+            )}
             <div>
               <Label htmlFor="username">{t("forms.username")}</Label>
               <Input
