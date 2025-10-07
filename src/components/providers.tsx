@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { SessionProvider } from 'next-auth/react'
-import { NextIntlClientProvider } from 'next-intl'
-import { ThemeProvider } from './theme-provider'
+import { SessionProvider } from "next-auth/react";
+import { NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "./theme-provider";
 
 interface ProvidersProps {
-  children: React.ReactNode
-  messages: any
-  locale: string
+  children: React.ReactNode;
+  messages: Record<string, unknown>;
+  locale: string;
 }
 
 export function Providers({ children, messages, locale }: ProvidersProps) {
@@ -24,5 +24,5 @@ export function Providers({ children, messages, locale }: ProvidersProps) {
         </ThemeProvider>
       </NextIntlClientProvider>
     </SessionProvider>
-  )
+  );
 }

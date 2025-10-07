@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -61,15 +61,7 @@ export default function DashboardPage() {
 
   const slug = params.slug as string;
 
-  useEffect(() => {
-    if (!session) {
-      router.push("/sign-in");
-      return;
-    }
-    fetchCommunity();
-  }, [session, slug]);
-
-  const fetchCommunity = async () => {
+  const fetchCommunity = useCallback(async () => {
     try {
       const response = await fetch(`/api/communities/${slug}`);
       if (!response.ok) {
@@ -84,7 +76,15 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug, router]);
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/sign-in");
+      return;
+    }
+    fetchCommunity();
+  }, [session, fetchCommunity, router]);
 
   if (isLoading) {
     return (

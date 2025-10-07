@@ -1,19 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { db } from '@/lib/db'
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { MemberRole, MemberStatus } from "@prisma/client";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { slug } = await params
+    const { slug } = await params;
     const community = await db.community.findUnique({
       where: { slug },
       include: {
@@ -25,70 +26,84 @@ export async function GET(
           },
         },
       },
-    })
+    });
 
     if (!community) {
-      return NextResponse.json({ error: 'Community not found' }, { status: 404 })
+      return NextResponse.json(
+        { error: "Community not found" },
+        { status: 404 },
+      );
     }
 
     // Check if user is admin/owner
-    const userMembership = community.members.find(m => m.userId === session.user.id)
-    if (!userMembership || !['OWNER', 'ADMIN'].includes(userMembership.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    const userMembership = community.members.find(
+      (m) => m.userId === session.user.id,
+    );
+    if (!userMembership || !["OWNER", "ADMIN"].includes(userMembership.role)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    return NextResponse.json(community.members)
+    return NextResponse.json(community.members);
   } catch (error) {
-    console.error('Error fetching members:', error)
+    console.error("Error fetching members:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch members' },
-      { status: 500 }
-    )
+      { error: "Failed to fetch members" },
+      { status: 500 },
+    );
   }
 }
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { userId, status, points, role } = body
+    const body = await request.json();
+    const { userId, status, points, role } = body;
 
-    const { slug } = await params
+    const { slug } = await params;
     const community = await db.community.findUnique({
       where: { slug },
       include: {
         members: true,
       },
-    })
+    });
 
     if (!community) {
-      return NextResponse.json({ error: 'Community not found' }, { status: 404 })
+      return NextResponse.json(
+        { error: "Community not found" },
+        { status: 404 },
+      );
     }
 
     // Check if user is admin/owner
-    const userMembership = community.members.find(m => m.userId === session.user.id)
-    if (!userMembership || !['OWNER', 'ADMIN'].includes(userMembership.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    const userMembership = community.members.find(
+      (m) => m.userId === session.user.id,
+    );
+    if (!userMembership || !["OWNER", "ADMIN"].includes(userMembership.role)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     // Check if target member exists
-    const targetMembership = community.members.find(m => m.userId === userId)
+    const targetMembership = community.members.find((m) => m.userId === userId);
     if (!targetMembership) {
-      return NextResponse.json({ error: 'Member not found' }, { status: 404 })
+      return NextResponse.json({ error: "Member not found" }, { status: 404 });
     }
 
     // Update membership
-    const updateData: any = {}
-    if (status) updateData.status = status
-    if (points !== undefined) updateData.points = points
-    if (role) updateData.role = role
+    const updateData: {
+      status?: MemberStatus;
+      points?: number;
+      role?: MemberRole;
+    } = {};
+    if (status) updateData.status = status as MemberStatus;
+    if (points !== undefined) updateData.points = points;
+    if (role) updateData.role = role as MemberRole;
 
     const updatedMembership = await db.communityMember.update({
       where: {
@@ -103,14 +118,14 @@ export async function PATCH(
           select: { username: true },
         },
       },
-    })
+    });
 
-    return NextResponse.json(updatedMembership)
+    return NextResponse.json(updatedMembership);
   } catch (error) {
-    console.error('Error updating member:', error)
+    console.error("Error updating member:", error);
     return NextResponse.json(
-      { error: 'Failed to update member' },
-      { status: 500 }
-    )
+      { error: "Failed to update member" },
+      { status: 500 },
+    );
   }
 }

@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create payment record (simulated)
-    const payment = await db.payment.create({
+    await db.payment.create({
       data: {
         userId: session.user.id,
         amountSats: 21,

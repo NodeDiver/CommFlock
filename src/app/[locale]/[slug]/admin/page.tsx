@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,7 +48,7 @@ export default function AdminPage() {
 
   const slug = params.slug as string;
 
-  const fetchCommunity = React.useCallback(async () => {
+  const fetchCommunity = useCallback(async () => {
     try {
       const response = await fetch(`/api/communities/${slug}`);
       if (!response.ok) {
