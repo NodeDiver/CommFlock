@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +47,6 @@ export default async function HomePage({
   // Load messages manually to avoid getRequestConfig issues
   const messages = (await import(`../../../messages/${locale}.json`)).default;
   const t = (key: string) => messages.common[key];
-  const tNav = (key: string) => messages.nav[key];
   const tDiscover = (key: string) => messages.discover[key];
 
   return (

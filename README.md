@@ -1,6 +1,17 @@
 # CommFlock
 
-CommFlock is a community/groups platform where users sign in with a username (email optional), optionally provide Lightning Address and Nostr Pubkey for enhanced functionality, discover or create communities, and coordinate activities. Communities can be public or private, auto-join or approval-required. Each community has announcements, activity, events with capacity control, simple votes, a leaderboard, and owner-defined badges. Payments are Lightning-first via NWC (phase 2); in phase 1 we simulate payments so flows are testable. Multi-tenant by slug (e.g., project.com/gordosbala). i18n en/es from day one. Built with Next.js (App Router), Prisma/Postgres, Auth.js, and shadcn/ui.
+**Version:** 0.2.0 | **Status:** Production Ready ✅
+
+CommFlock is a Lightning-powered community platform where users discover and create communities, coordinate events, and connect with others. Built with Next.js 15, Prisma, PostgreSQL, and shadcn/ui.
+
+## What's New in v0.2
+
+- ✨ **New Landing Page** with animated hero section and community discovery
+- 🔒 **Phase 1-5 Complete**: Testing, password reset, rate limiting, CI/CD, and error monitoring
+- 🌍 **Full i18n Support**: English and Spanish throughout entire site
+- 📊 **Load More Pagination**: Discover communities with infinite scroll
+- 🔐 **Security Hardened**: Rate limiting, password reset, Sentry monitoring
+- 🤖 **CI/CD Pipeline**: Automated testing and deployment
 
 ## Features
 
@@ -28,24 +39,27 @@ CommFlock is a community/groups platform where users sign in with a username (em
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL 14+ (for local development)
 - npm or pnpm
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd CommFlock
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp env.example .env
 ```
@@ -53,6 +67,7 @@ cp env.example .env
 Edit `.env` with your database credentials:
 
 **For open source contributors (SQLite):**
+
 ```env
 DATABASE_URL="file:./dev.db"
 NEXTAUTH_URL="http://localhost:3000"
@@ -60,6 +75,7 @@ NEXTAUTH_SECRET="dev-secret-change-later"
 ```
 
 **For shared development (Neon PostgreSQL):**
+
 ```env
 DATABASE_URL="postgresql://USER:PASSWORD@HOST-POOLER.neon.tech/DB?sslmode=require&pgbouncer=true"
 DIRECT_URL="postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require"
@@ -68,6 +84,7 @@ NEXTAUTH_SECRET="dev-secret-change-later"
 ```
 
 4. Set up the database:
+
 ```bash
 # Run migrations
 npm run db:migrate
@@ -80,6 +97,7 @@ npm run seed
 ```
 
 5. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -177,6 +195,7 @@ src/
 The project uses Prisma as the ORM with PostgreSQL. Database schema is defined in `prisma/schema.prisma`.
 
 Key models:
+
 - **User**: Users with username and optional email
 - **Community**: Multi-tenant communities with various settings
 - **CommunityMember**: User memberships with roles and status
@@ -186,27 +205,63 @@ Key models:
 
 ### Authentication
 
-Currently uses a simple credentials provider for development:
-- Username (required)
-- Email (optional)
-- No passwords in v1
+Secure authentication with Auth.js:
+
+- Username + password (required)
+- Email (optional, for password reset)
+- Lightning Address (optional, for payments)
+- Nostr Pubkey (optional, for decentralized identity)
+- Password reset flow with email tokens
+- Rate limiting on auth endpoints
 
 ### Internationalization
 
 The app supports English and Spanish with next-intl:
-- Default locale: Spanish (es)
+
+- Default locale: English (en)
 - URL structure: `/en/...` or `/es/...`
 - Message files in `src/messages/`
+- Language switcher in header
+- Full translation coverage (100%)
 
-## Phase 2 Roadmap
+## Roadmap
+
+### ✅ Phase 1-5: Complete
+
+- Testing framework (Vitest + Playwright)
+- Password reset with email
+- Rate limiting (Upstash Redis)
+- CI/CD pipeline (GitHub Actions)
+- Error monitoring (Sentry)
+
+### 🚧 Phase 2: Security Hardening (Next)
+
+- CSRF protection
+- Authorization audit
+- Input sanitization
+- Session security improvements
+
+### 📋 Phase 3: Performance
+
+- Database indexes
+- Caching strategy
+- Image optimization
+- Performance monitoring
+
+### 🎯 Phase 4: Features
+
+- Notifications system
+- Image uploads
+- Advanced search
+- Analytics dashboard
+
+### ⚡ Phase 5: Lightning Integration
 
 - Real Lightning payments via NWC
-- Additional authentication providers (Google, GitHub, Nostr)
-- Email/push notifications
-- Media uploads for community covers
-- Moderation tools
-- Metrics dashboard
-- E2E tests
+- Payment webhooks
+- Automatic refunds
+
+See `PROJECT_ROADMAP.md` for full details.
 
 ## Contributing
 
