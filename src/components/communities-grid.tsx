@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+/**
+ * Community type returned from API
+ */
 type Community = {
   id: string;
   name: string;
@@ -21,6 +24,15 @@ type Community = {
   };
 };
 
+/**
+ * Props for the CommunitiesGrid component
+ *
+ * @property initialCommunities - Initial list of communities to display
+ * @property totalCount - Total number of communities available (for pagination)
+ * @property showSearch - Whether to display search input (default: true)
+ * @property showLoadMore - Whether to display "Load More" button (default: true)
+ * @property loadMoreIncrement - Number of communities to load per click (default: 6)
+ */
 type CommunitiesGridProps = {
   initialCommunities: Community[];
   totalCount: number;
@@ -29,6 +41,15 @@ type CommunitiesGridProps = {
   loadMoreIncrement?: number;
 };
 
+/**
+ * CommunitiesGrid - Displays a grid of communities with search and pagination
+ *
+ * Features:
+ * - Search communities by name or slug
+ * - Client-side "Load More" pagination
+ * - Responsive grid layout (1 col mobile, 2 tablet, 3 desktop)
+ * - Click to navigate to community page
+ */
 export function CommunitiesGrid({
   initialCommunities,
   totalCount,
@@ -46,6 +67,10 @@ export function CommunitiesGrid({
 
   const hasMore = communities.length < totalCount;
 
+  /**
+   * Loads more communities using skip/take pagination
+   * Appends new communities to the existing list
+   */
   const handleLoadMore = async () => {
     setIsLoading(true);
     try {
@@ -67,6 +92,12 @@ export function CommunitiesGrid({
     }
   };
 
+  /**
+   * Searches communities by name or slug
+   * Replaces the current communities list with search results
+   *
+   * @param query - Search string from input field
+   */
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
     if (!query.trim()) {

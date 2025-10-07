@@ -5,6 +5,16 @@ import { db } from "@/lib/db";
 import { createCommunitySchema } from "@/lib/validators";
 import { generateSlug } from "@/lib/slug";
 
+/**
+ * GET /api/communities - Fetches public communities with pagination and search
+ *
+ * Supports two pagination modes:
+ * 1. Client-side: ?skip=0&take=10 → Returns array of communities
+ * 2. Server-side: ?page=1&limit=10 → Returns {communities, pagination}
+ *
+ * @param request - NextRequest with query params: search, skip, take, page, limit
+ * @returns Array of communities or object with pagination metadata
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -73,6 +83,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * POST /api/communities - Creates a new community
+ *
+ * Flow:
+ * 1. Validates user session
+ * 2. Validates community data with Zod schema
+ * 3. Generates slug from name if not provided
+ * 4. Creates simulated payment record (21 sats)
+ * 5. Creates community and owner membership in transaction
+ *
+ * @param request - NextRequest with JSON body: name, description, isPublic, joinPolicy, etc.
+ * @returns Created community object with owner membership
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

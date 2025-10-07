@@ -1,12 +1,27 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * next-intl middleware configuration
+ * Handles locale detection and routing for en/es languages
+ */
 const intlMiddleware = createMiddleware({
   locales: ["en", "es"],
   defaultLocale: "en",
   localePrefix: "always", // fuerza /en y /es
 });
 
+/**
+ * Main middleware function for CommFlock routing
+ *
+ * Processing order:
+ * 1. Skip static assets (/_next/, /api/, images, etc.)
+ * 2. Apply next-intl middleware for locale detection
+ * 3. Allow community slug routes (/[locale]/[slug])
+ *
+ * @param request - Incoming Next.js request
+ * @returns NextResponse with locale routing or pass-through
+ */
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -59,6 +74,15 @@ export default function middleware(request: NextRequest) {
   return intlResponse;
 }
 
+/**
+ * Middleware configuration - defines which routes to process
+ *
+ * Matches all routes EXCEPT:
+ * - /api/* routes
+ * - /_next/static (Next.js static files)
+ * - /_next/image (Next.js image optimization)
+ * - /favicon.ico
+ */
 export const config = {
   matcher: [
     // Match all paths except:
