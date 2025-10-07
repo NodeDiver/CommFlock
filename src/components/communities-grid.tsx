@@ -52,8 +52,14 @@ export function CommunitiesGrid({
       const response = await fetch(
         `/api/communities?skip=${communities.length}&take=${loadMoreIncrement}`,
       );
-      const newCommunities = await response.json();
-      setCommunities([...communities, ...newCommunities]);
+      const data = await response.json();
+
+      // API returns array when using skip/take parameters
+      if (Array.isArray(data)) {
+        setCommunities([...communities, ...data]);
+      } else {
+        console.error("Unexpected response format:", data);
+      }
     } catch (error) {
       console.error("Error loading more communities:", error);
     } finally {
@@ -71,10 +77,16 @@ export function CommunitiesGrid({
     setIsLoading(true);
     try {
       const response = await fetch(
-        `/api/communities?search=${encodeURIComponent(query)}`,
+        `/api/communities?search=${encodeURIComponent(query)}&skip=0&take=20`,
       );
-      const searchResults = await response.json();
-      setCommunities(searchResults);
+      const data = await response.json();
+
+      // API returns array when using skip/take parameters
+      if (Array.isArray(data)) {
+        setCommunities(data);
+      } else {
+        console.error("Unexpected response format:", data);
+      }
     } catch (error) {
       console.error("Error searching communities:", error);
     } finally {
