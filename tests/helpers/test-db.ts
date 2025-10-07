@@ -1,73 +1,84 @@
-import { PrismaClient } from '@prisma/client'
-import { beforeEach } from 'vitest'
+import { db } from "@/lib/db";
 
-// Use a separate test database
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL_TEST || process.env.DATABASE_URL,
-    },
-  },
-})
+// Use the same database connection as the app
+const prisma = db;
 
 /**
  * Clean database before each test
  */
 export async function cleanDatabase() {
-  const tables = [
-    'PollVote',
-    'Poll',
-    'EventRegistration',
-    'Event',
-    'Announcement',
-    'UserBadge',
-    'Badge',
-    'Payment',
-    'CommunityMember',
-    'Community',
-    'User',
-  ]
-
-  for (const table of tables) {
-    await prisma.$executeRawUnsafe(`DELETE FROM "${table}"`)
-  }
+  // Delete in correct order to respect foreign key constraints
+  await prisma.pollVote.deleteMany({});
+  await prisma.poll.deleteMany({});
+  await prisma.eventRegistration.deleteMany({});
+  await prisma.event.deleteMany({});
+  await prisma.announcement.deleteMany({});
+  await prisma.userBadge.deleteMany({});
+  await prisma.badge.deleteMany({});
+  await prisma.payment.deleteMany({});
+  await prisma.communityMember.deleteMany({});
+  await prisma.community.deleteMany({});
+  await prisma.passwordResetToken.deleteMany({});
+  await prisma.user.deleteMany({});
 }
 
 /**
  * Create a test user
  */
 export async function createTestUser(data?: {
-  username?: string
-  email?: string
-  hashedPassword?: string
+  username?: string;
+  email?: string;
+  hashedPassword?: string | null;
 }) {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(7);
+
+  const userData: {
+    username: string;
+    email: string;
+    hashedPassword?: string | null;
+  } = {
+    username: data?.username || `testuser_${timestamp}_${random}`,
+    email: data?.email || `test_${timestamp}_${random}@example.com`,
+  };
+
+  // Only set hashedPassword if it's provided and not undefined
+  // undefined means use default, null means explicitly no password
+  if (data && "hashedPassword" in data) {
+    userData.hashedPassword = data.hashedPassword;
+  } else if (!data) {
+    userData.hashedPassword = "$2b$12$testhashedpassword";
+  }
+
   return prisma.user.create({
-    data: {
-      username: data?.username || 'testuser',
-      email: data?.email || 'test@example.com',
-      hashedPassword: data?.hashedPassword || '$2b$12$testhashedpassword',
-    },
-  })
+    data: userData,
+  });
 }
 
 /**
  * Create a test community
  */
-export async function createTestCommunity(ownerId: string, data?: {
-  name?: string
-  slug?: string
-  isPublic?: boolean
-}) {
+export async function createTestCommunity(
+  ownerId: string,
+  data?: {
+    name?: string;
+    slug?: string;
+    isPublic?: boolean;
+  },
+) {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(7);
+
   return prisma.community.create({
     data: {
-      name: data?.name || 'Test Community',
-      slug: data?.slug || 'test-community',
-      description: 'A test community',
+      name: data?.name || `Test Community ${timestamp}`,
+      slug: data?.slug || `test-community-${timestamp}-${random}`,
+      description: "A test community",
       isPublic: data?.isPublic ?? true,
-      joinPolicy: 'AUTO_JOIN',
+      joinPolicy: "AUTO_JOIN",
       ownerId,
     },
-  })
+  });
 }
 
 /**
@@ -76,21 +87,16 @@ export async function createTestCommunity(ownerId: string, data?: {
 export async function addCommunityMember(
   userId: string,
   communityId: string,
-  role: 'OWNER' | 'ADMIN' | 'MEMBER' = 'MEMBER'
+  role: "OWNER" | "ADMIN" | "MEMBER" = "MEMBER",
 ) {
   return prisma.communityMember.create({
     data: {
       userId,
       communityId,
       role,
-      status: 'APPROVED',
+      status: "APPROVED",
     },
-  })
+  });
 }
 
-export { prisma as testDb }
-
-// Clean database before each test by default
-beforeEach(async () => {
-  await cleanDatabase()
-})
+export { prisma as testDb };
