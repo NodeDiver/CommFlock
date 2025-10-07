@@ -125,5 +125,15 @@
     "eventCreated": "Event created successfully",
     "pollCreated": "Poll created successfully",
     "voted": "Vote submitted successfully"
+  },
+  "discover": {
+    "title": "Discover Communities",
+    "subtitle": "Explore and join communities that match your interests",
+    "search": "Search communities...",
+    "loadMore": "Load More",
+    "viewCommunity": "View Community",
+    "noCommunities": "No communities found",
+    "createFirst": "Create First Community",
+    "allLoaded": "That's all for now! Check back later for more communities."
   }
 }

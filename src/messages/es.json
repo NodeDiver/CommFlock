@@ -125,5 +125,15 @@
     "eventCreated": "Evento creado exitosamente",
     "pollCreated": "Encuesta creada exitosamente",
     "voted": "Voto enviado exitosamente"
+  },
+  "discover": {
+    "title": "Descubre Comunidades",
+    "subtitle": "Explora y únete a comunidades que coincidan con tus intereses",
+    "search": "Buscar comunidades...",
+    "loadMore": "Cargar Más",
+    "viewCommunity": "Ver Comunidad",
+    "noCommunities": "No se encontraron comunidades",
+    "createFirst": "Crear Primera Comunidad",
+    "allLoaded": "¡Eso es todo por ahora! Vuelve más tarde para ver más comunidades."
   }
 }
