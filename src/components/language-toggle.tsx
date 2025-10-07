@@ -43,6 +43,7 @@ export function LanguageToggle() {
         <Button
           variant="outline"
           size="icon"
+          data-testid="language-toggle"
           className="hover-lift hover-scale animate-bounce"
         >
           <Languages className="h-[1.2rem] w-[1.2rem]" />

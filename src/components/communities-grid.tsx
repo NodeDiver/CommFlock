@@ -158,6 +158,7 @@ export function CommunitiesGrid({
             {communities.map((community) => (
               <Card
                 key={community.id}
+                data-testid="community-card"
                 className="hover:shadow-lg transition-shadow cursor-pointer"
                 onClick={() => handleViewCommunity(community.slug)}
               >
