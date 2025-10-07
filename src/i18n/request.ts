@@ -1,15 +1,14 @@
 import { getRequestConfig } from "next-intl/server";
+import { logger } from "@/lib/logger";
 
 export default getRequestConfig(async ({ locale }) => {
   // Ensure locale is valid, default to 'en' if undefined
   const validLocale = locale && ["en", "es"].includes(locale) ? locale : "en";
 
-  console.log(
-    "🔍 getRequestConfig called with locale:",
+  logger.info("getRequestConfig called", {
     locale,
-    "validLocale:",
     validLocale,
-  );
+  });
 
   return {
     locale: validLocale,

@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { logger } from "@/lib/logger";
 
 function ResetPasswordForm() {
   const [password, setPassword] = useState("");
@@ -72,7 +73,7 @@ function ResetPasswordForm() {
         setError(data.error || "Failed to reset password");
       }
     } catch (error) {
-      console.error("Reset password error:", error);
+      logger.error("Reset password error:", error);
       setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);

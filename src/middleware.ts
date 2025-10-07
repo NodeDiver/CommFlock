@@ -1,5 +1,6 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 /**
  * next-intl middleware configuration
@@ -25,7 +26,7 @@ const intlMiddleware = createMiddleware({
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  console.log("🔍 Middleware processing:", pathname);
+  logger.debug("Middleware processing", { pathname });
 
   // Skip static assets
   if (
@@ -33,7 +34,7 @@ export default function middleware(request: NextRequest) {
     pathname.startsWith("/api/") ||
     pathname.match(/\.(svg|png|jpg|jpeg|gif|ico|css|js)$/)
   ) {
-    console.log("✅ Skipping static asset:", pathname);
+    logger.debug("Skipping static asset", { pathname });
     return NextResponse.next();
   }
 

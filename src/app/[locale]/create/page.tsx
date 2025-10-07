@@ -1,78 +1,92 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
-import { generateSlug } from '@/lib/slug'
-import { toast } from 'sonner'
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { generateSlug } from "@/lib/slug";
+import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export default function CreateCommunityPage() {
-  const [name, setName] = useState('')
-  const [slug, setSlug] = useState('')
-  const [description, setDescription] = useState('')
-  const [isPublic, setIsPublic] = useState(true)
-  const [joinPolicy, setJoinPolicy] = useState('AUTO_JOIN')
-  const [requiresLightningAddress, setRequiresLightningAddress] = useState(false)
-  const [requiresNostrPubkey, setRequiresNostrPubkey] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [description, setDescription] = useState("");
+  const [isPublic, setIsPublic] = useState(true);
+  const [joinPolicy, setJoinPolicy] = useState("AUTO_JOIN");
+  const [requiresLightningAddress, setRequiresLightningAddress] =
+    useState(false);
+  const [requiresNostrPubkey, setRequiresNostrPubkey] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
-  const { data: session } = useSession()
-  const router = useRouter()
-  const t = useTranslations()
+  const { data: session } = useSession();
+  const router = useRouter();
+  const t = useTranslations();
 
   // Auto-generate slug from name in real-time
   const handleNameChange = (value: string) => {
-    setName(value)
+    setName(value);
     // Only auto-update slug if user hasn't manually edited it
     if (!isSlugManuallyEdited) {
-      setSlug(generateSlug(value))
+      setSlug(generateSlug(value));
     }
-  }
+  };
 
   // Handle manual slug changes
   const handleSlugChange = (value: string) => {
-    setSlug(value)
+    setSlug(value);
     // Mark as manually edited to stop auto-updates
-    setIsSlugManuallyEdited(true)
-  }
+    setIsSlugManuallyEdited(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!session) {
-      toast.error('Please sign in to create a community')
-      return
+      toast.error("Please sign in to create a community");
+      return;
     }
 
-    setIsLoading(true)
-    setIsProcessingPayment(true)
+    setIsLoading(true);
+    setIsProcessingPayment(true);
 
     try {
       // Simulate payment first
-      const paymentResponse = await fetch('/api/payments/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amountSats: 21, type: 'community' }),
-      })
+      const paymentResponse = await fetch("/api/payments/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amountSats: 21, type: "community" }),
+      });
 
       if (!paymentResponse.ok) {
-        throw new Error('Payment simulation failed')
+        throw new Error("Payment simulation failed");
       }
 
       // Create community
-      const communityResponse = await fetch('/api/communities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const communityResponse = await fetch("/api/communities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           slug,
@@ -82,24 +96,26 @@ export default function CreateCommunityPage() {
           requiresLightningAddress,
           requiresNostrPubkey,
         }),
-      })
+      });
 
       if (!communityResponse.ok) {
-        const error = await communityResponse.json()
-        throw new Error(error.error || 'Failed to create community')
+        const error = await communityResponse.json();
+        throw new Error(error.error || "Failed to create community");
       }
 
-      const community = await communityResponse.json()
-      toast.success(t('success.communityCreated'))
-      router.push(`/${community.slug}`)
+      const community = await communityResponse.json();
+      toast.success(t("success.communityCreated"));
+      router.push(`/${community.slug}`);
     } catch (error) {
-      console.error('Error creating community:', error)
-      toast.error(error instanceof Error ? error.message : 'Failed to create community')
+      logger.error("Error creating community:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create community",
+      );
     } finally {
-      setIsLoading(false)
-      setIsProcessingPayment(false)
+      setIsLoading(false);
+      setIsProcessingPayment(false);
     }
-  }
+  };
 
   if (!session) {
     return (
@@ -112,13 +128,13 @@ export default function CreateCommunityPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => router.push('/sign-in')} className="w-full">
+            <Button onClick={() => router.push("/sign-in")} className="w-full">
               Sign In
             </Button>
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -129,13 +145,14 @@ export default function CreateCommunityPage() {
             <CardHeader>
               <CardTitle>Create New Community</CardTitle>
               <CardDescription>
-                Build a community and start connecting with others. Creating a community costs 21 sats.
+                Build a community and start connecting with others. Creating a
+                community costs 21 sats.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <Label htmlFor="name">{t('forms.communityName')}</Label>
+                  <Label htmlFor="name">{t("forms.communityName")}</Label>
                   <Input
                     id="name"
                     value={name}
@@ -146,7 +163,7 @@ export default function CreateCommunityPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="slug">{t('forms.slug')}</Label>
+                  <Label htmlFor="slug">{t("forms.slug")}</Label>
                   <Input
                     id="slug"
                     value={slug}
@@ -172,7 +189,9 @@ export default function CreateCommunityPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="description">{t('forms.communityDescription')}</Label>
+                  <Label htmlFor="description">
+                    {t("forms.communityDescription")}
+                  </Label>
                   <Textarea
                     id="description"
                     value={description}
@@ -183,14 +202,16 @@ export default function CreateCommunityPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="joinPolicy">{t('forms.joinPolicy')}</Label>
+                  <Label htmlFor="joinPolicy">{t("forms.joinPolicy")}</Label>
                   <Select value={joinPolicy} onValueChange={setJoinPolicy}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="AUTO_JOIN">Auto Join</SelectItem>
-                      <SelectItem value="APPROVAL_REQUIRED">Approval Required</SelectItem>
+                      <SelectItem value="APPROVAL_REQUIRED">
+                        Approval Required
+                      </SelectItem>
                       <SelectItem value="CLOSED">Closed</SelectItem>
                     </SelectContent>
                   </Select>
@@ -201,42 +222,48 @@ export default function CreateCommunityPage() {
                     <Checkbox
                       id="isPublic"
                       checked={isPublic}
-                      onCheckedChange={(checked) => setIsPublic(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setIsPublic(checked as boolean)
+                      }
                     />
-                    <Label htmlFor="isPublic">{t('forms.isPublic')}</Label>
+                    <Label htmlFor="isPublic">{t("forms.isPublic")}</Label>
                   </div>
 
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="requiresLightningAddress"
                       checked={requiresLightningAddress}
-                      onCheckedChange={(checked) => setRequiresLightningAddress(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setRequiresLightningAddress(checked as boolean)
+                      }
                     />
-                    <Label htmlFor="requiresLightningAddress">{t('forms.requiresLightningAddress')}</Label>
+                    <Label htmlFor="requiresLightningAddress">
+                      {t("forms.requiresLightningAddress")}
+                    </Label>
                   </div>
 
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="requiresNostrPubkey"
                       checked={requiresNostrPubkey}
-                      onCheckedChange={(checked) => setRequiresNostrPubkey(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setRequiresNostrPubkey(checked as boolean)
+                      }
                     />
-                    <Label htmlFor="requiresNostrPubkey">{t('forms.requiresNostrPubkey')}</Label>
+                    <Label htmlFor="requiresNostrPubkey">
+                      {t("forms.requiresNostrPubkey")}
+                    </Label>
                   </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={isLoading}
-                >
+                <Button type="submit" className="w-full" disabled={isLoading}>
                   {isProcessingPayment ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       Processing Payment...
                     </>
                   ) : (
-                    `${t('actions.create')} & ${t('actions.pay21sats')}`
+                    `${t("actions.create")} & ${t("actions.pay21sats")}`
                   )}
                 </Button>
               </form>
@@ -245,5 +272,5 @@ export default function CreateCommunityPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

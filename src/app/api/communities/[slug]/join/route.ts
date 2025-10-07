@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   request: NextRequest,
@@ -80,7 +81,7 @@ export async function POST(
 
     return NextResponse.json(membership, { status: 201 });
   } catch (error) {
-    console.error("Error joining community:", error);
+    logger.error("Error joining community:", error);
     return NextResponse.json(
       { error: "Failed to join community" },
       { status: 500 },

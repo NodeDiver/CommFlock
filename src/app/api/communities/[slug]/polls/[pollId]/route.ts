@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string; pollId: string }> }
+  { params }: { params: Promise<{ slug: string; pollId: string }> },
 ) {
   try {
-    const { slug, pollId } = await params
+    const { slug, pollId } = await params;
 
     // Find the poll with community and votes
     const poll = await db.poll.findUnique({
@@ -26,23 +27,26 @@ export async function GET(
           },
         },
       },
-    })
+    });
 
     if (!poll) {
-      return NextResponse.json({ error: 'Poll not found' }, { status: 404 })
+      return NextResponse.json({ error: "Poll not found" }, { status: 404 });
     }
 
     // Check if community slug matches
     if (poll.community.slug !== slug) {
-      return NextResponse.json({ error: 'Poll not found in this community' }, { status: 404 })
+      return NextResponse.json(
+        { error: "Poll not found in this community" },
+        { status: 404 },
+      );
     }
 
-    return NextResponse.json(poll)
+    return NextResponse.json(poll);
   } catch (error) {
-    console.error('Error fetching poll:', error)
+    logger.error("Error fetching poll:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch poll' },
-      { status: 500 }
-    )
+      { error: "Failed to fetch poll" },
+      { status: 500 },
+    );
   }
 }

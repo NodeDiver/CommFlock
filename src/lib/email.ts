@@ -1,23 +1,26 @@
-import { Resend } from 'resend'
+import { Resend } from "resend";
+import { logger } from "@/lib/logger";
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
-  : null
+  : null;
 
 export async function sendPasswordResetEmail(
   email: string,
   resetToken: string,
   username: string,
-  locale: 'en' | 'es' = 'en'
+  locale: "en" | "es" = "en",
 ) {
-  const resetUrl = `${process.env.NEXTAUTH_URL}/${locale}/reset-password?token=${resetToken}`
+  const resetUrl = `${process.env.NEXTAUTH_URL}/${locale}/reset-password?token=${resetToken}`;
 
-  const subject = locale === 'es'
-    ? 'Restablece tu contraseña de CommFlock'
-    : 'Reset your CommFlock password'
+  const subject =
+    locale === "es"
+      ? "Restablece tu contraseña de CommFlock"
+      : "Reset your CommFlock password";
 
-  const htmlContent = locale === 'es'
-    ? `
+  const htmlContent =
+    locale === "es"
+      ? `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Hola ${username},</h2>
         <p>Recibimos una solicitud para restablecer tu contraseña.</p>
@@ -35,7 +38,7 @@ export async function sendPasswordResetEmail(
         </p>
       </div>
     `
-    : `
+      : `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Hi ${username},</h2>
         <p>We received a request to reset your password.</p>
@@ -52,18 +55,20 @@ export async function sendPasswordResetEmail(
           If you didn't request a password reset, please ignore this email.
         </p>
       </div>
-    `
+    `;
 
   if (!resend) {
-    console.warn('Email service not configured. Password reset link:')
-    console.warn(resetUrl)
-    return
+    logger.warn("Email service not configured, showing reset link in logs", {
+      resetUrl,
+      email,
+    });
+    return;
   }
 
   await resend.emails.send({
-    from: 'CommFlock <noreply@commflock.com>',
+    from: "CommFlock <noreply@commflock.com>",
     to: email,
     subject,
     html: htmlContent,
-  })
+  });
 }

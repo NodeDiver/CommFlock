@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface Event {
   id: string;
@@ -67,7 +68,7 @@ export default function EventPage() {
       }
       setEvent(await response.json());
     } catch (error) {
-      console.error("Error fetching event:", error);
+      logger.error("Error fetching event:", error);
       toast.error("Failed to load event");
     } finally {
       setIsLoading(false);
@@ -103,7 +104,7 @@ export default function EventPage() {
         toast.error(data.error || "Failed to register for event");
       }
     } catch (error) {
-      console.error("Error registering for event:", error);
+      logger.error("Error registering for event:", error);
       toast.error("Failed to register for event");
     } finally {
       setIsRegistering(false);

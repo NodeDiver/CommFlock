@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { MemberRole, MemberStatus } from "@prisma/client";
+import { logger } from "@/lib/logger";
 
 export async function GET(
   request: NextRequest,
@@ -45,7 +46,7 @@ export async function GET(
 
     return NextResponse.json(community.members);
   } catch (error) {
-    console.error("Error fetching members:", error);
+    logger.error("Error fetching members:", error);
     return NextResponse.json(
       { error: "Failed to fetch members" },
       { status: 500 },
@@ -122,7 +123,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedMembership);
   } catch (error) {
-    console.error("Error updating member:", error);
+    logger.error("Error updating member:", error);
     return NextResponse.json(
       { error: "Failed to update member" },
       { status: 500 },

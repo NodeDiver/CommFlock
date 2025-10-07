@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface Community {
   id: string;
@@ -71,7 +72,7 @@ export default function DashboardPage() {
       }
       setCommunity(await response.json());
     } catch (error) {
-      console.error("Error fetching community:", error);
+      logger.error("Error fetching community:", error);
       toast.error("Failed to load community");
     } finally {
       setIsLoading(false);

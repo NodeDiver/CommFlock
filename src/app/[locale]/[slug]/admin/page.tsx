@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface Community {
   id: string;
@@ -68,7 +69,7 @@ export default function AdminPage() {
         setCommunity(communityData);
       }
     } catch (error) {
-      console.error("Error fetching community:", error);
+      logger.error("Error fetching community:", error);
       toast.error("Failed to load community");
     } finally {
       setIsLoading(false);
@@ -102,7 +103,7 @@ export default function AdminPage() {
         toast.error(error.error || "Failed to update member status");
       }
     } catch (error) {
-      console.error("Error updating member status:", error);
+      logger.error("Error updating member status:", error);
       toast.error("Failed to update member status");
     }
   };
@@ -123,7 +124,7 @@ export default function AdminPage() {
         toast.error(error.error || "Failed to update points");
       }
     } catch (error) {
-      console.error("Error updating points:", error);
+      logger.error("Error updating points:", error);
       toast.error("Failed to update points");
     }
   };

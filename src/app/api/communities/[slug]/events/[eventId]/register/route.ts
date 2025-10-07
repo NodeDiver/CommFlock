@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   request: NextRequest,
@@ -101,7 +102,7 @@ export async function POST(
 
     return NextResponse.json(registration, { status: 201 });
   } catch (error) {
-    console.error("Error registering for event:", error);
+    logger.error("Error registering for event:", error);
     return NextResponse.json(
       { error: "Failed to register for event" },
       { status: 500 },

@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createCommunitySchema } from "@/lib/validators";
 import { generateSlug } from "@/lib/slug";
+import { logger } from "@/lib/logger";
 
 /**
  * GET /api/communities - Fetches public communities with pagination and search
@@ -75,7 +76,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching communities:", error);
+    logger.error("Error fetching communities:", error);
     return NextResponse.json(
       { error: "Failed to fetch communities" },
       { status: 500 },
@@ -160,7 +161,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(community, { status: 201 });
   } catch (error) {
-    console.error("Error creating community:", error);
+    logger.error("Error creating community:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Invalid input data" },

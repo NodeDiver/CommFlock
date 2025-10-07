@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,17 +22,21 @@ export function LanguageToggle() {
     // Get current path from browser
     const currentPath = window.location.pathname;
 
-    console.log("🔍 LanguageToggle - Current path:", currentPath);
-    console.log("🔍 LanguageToggle - Current locale:", locale);
-    console.log("🔍 LanguageToggle - Switching to:", newLocale);
+    logger.info("LanguageToggle switching locale", {
+      currentPath,
+      currentLocale: locale,
+      newLocale,
+    });
 
     // Replace the locale in the current path
     // Current path will be like /en/discover or /es or /en
     const pathWithoutLocale = currentPath.replace(/^\/(en|es)/, "") || "/";
     const newUrl = `/${newLocale}${pathWithoutLocale}`;
 
-    console.log("🔍 LanguageToggle - Path without locale:", pathWithoutLocale);
-    console.log("🔍 LanguageToggle - Navigating to:", newUrl);
+    logger.info("LanguageToggle navigating", {
+      pathWithoutLocale,
+      newUrl,
+    });
 
     // Navigate to the same path but with new locale
     window.location.href = newUrl;

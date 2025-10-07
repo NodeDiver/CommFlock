@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { voteSchema } from "@/lib/validators";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   request: NextRequest,
@@ -85,7 +86,7 @@ export async function POST(
 
     return NextResponse.json(vote, { status: 201 });
   } catch (error) {
-    console.error("Error voting:", error);
+    logger.error("Error voting:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json({ error: "Invalid vote data" }, { status: 400 });
     }

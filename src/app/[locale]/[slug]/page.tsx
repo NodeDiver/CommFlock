@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface Community {
   id: string;
@@ -56,7 +57,7 @@ export default function CommunityPage() {
         router.push("/discover");
       }
     } catch (error) {
-      console.error("Error fetching community:", error);
+      logger.error("Error fetching community:", error);
       toast.error("Failed to load community");
     } finally {
       setIsLoading(false);
@@ -89,7 +90,7 @@ export default function CommunityPage() {
         toast.error(data.error || "Failed to join community");
       }
     } catch (error) {
-      console.error("Error joining community:", error);
+      logger.error("Error joining community:", error);
       toast.error("Failed to join community");
     } finally {
       setIsJoining(false);

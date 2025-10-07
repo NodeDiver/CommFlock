@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface PollOption {
   key: string;
@@ -67,7 +68,7 @@ export default function PollPage() {
       }
       setPoll(await response.json());
     } catch (error) {
-      console.error("Error fetching poll:", error);
+      logger.error("Error fetching poll:", error);
       toast.error("Failed to load poll");
     } finally {
       setIsLoading(false);
@@ -104,7 +105,7 @@ export default function PollPage() {
         toast.error(data.error || "Failed to submit vote");
       }
     } catch (error) {
-      console.error("Error voting:", error);
+      logger.error("Error voting:", error);
       toast.error("Failed to submit vote");
     } finally {
       setIsVoting(false);

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { CommunitiesGrid } from "@/components/communities-grid";
 import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 async function getInitialCommunities() {
   try {
@@ -31,7 +32,7 @@ async function getInitialCommunities() {
 
     return { communities, total };
   } catch (error) {
-    console.error("Error fetching communities:", error);
+    logger.error("Error fetching communities:", error);
     return { communities: [], total: 0 };
   }
 }

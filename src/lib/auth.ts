@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "./db";
 import bcrypt from "bcrypt";
+import { logger } from "@/lib/logger";
 
 /**
  * NextAuth configuration options for CommFlock authentication
@@ -51,7 +52,9 @@ export const authOptions: NextAuthOptions = {
           // This allows users created before password feature to still sign in
           // TODO: Prompt these users to set a password in their profile
           if (!user.hashedPassword) {
-            console.warn(`Legacy user sign-in (no password): ${user.username}`);
+            logger.warn("Legacy user sign-in without password", {
+              username: user.username,
+            });
             return {
               id: user.id,
               username: user.username,
@@ -76,7 +79,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
           };
         } catch (error) {
-          console.error("Auth error:", error);
+          logger.error("Authentication error", error);
           return null;
         }
       },

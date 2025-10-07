@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 /**
  * Community type returned from API
@@ -83,10 +84,10 @@ export function CommunitiesGrid({
       if (Array.isArray(data)) {
         setCommunities([...communities, ...data]);
       } else {
-        console.error("Unexpected response format:", data);
+        logger.error("Unexpected response format:", data);
       }
     } catch (error) {
-      console.error("Error loading more communities:", error);
+      logger.error("Error loading more communities:", error);
     } finally {
       setIsLoading(false);
     }
@@ -116,10 +117,10 @@ export function CommunitiesGrid({
       if (Array.isArray(data)) {
         setCommunities(data);
       } else {
-        console.error("Unexpected response format:", data);
+        logger.error("Unexpected response format:", data);
       }
     } catch (error) {
-      console.error("Error searching communities:", error);
+      logger.error("Error searching communities:", error);
     } finally {
       setIsLoading(false);
     }
