@@ -31,15 +31,31 @@ export async function POST(
 
     // Check if event is open for registration
     if (event.status !== "OPEN") {
+      const statusMessages = {
+        DRAFT:
+          "This event is still being planned and is not yet open for registration.",
+        CONFIRMED: "Registration for this event has closed.",
+        CANCELLED: "This event has been cancelled.",
+        EXPIRED: "This event has already ended.",
+      };
       return NextResponse.json(
-        { error: "Event is not open for registration" },
+        {
+          error:
+            statusMessages[event.status as keyof typeof statusMessages] ||
+            "Event is not open for registration",
+        },
         { status: 400 },
       );
     }
 
     // Check if event is full
     if (event.registrations.length >= event.capacity) {
-      return NextResponse.json({ error: "Event is full" }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: `This event is at full capacity (${event.capacity} attendees). Please check back later in case spots become available.`,
+        },
+        { status: 400 },
+      );
     }
 
     // Check if user is already registered
@@ -104,7 +120,10 @@ export async function POST(
   } catch (error) {
     logger.error("Error registering for event:", error);
     return NextResponse.json(
-      { error: "Failed to register for event" },
+      {
+        error:
+          "Unable to complete registration at this time. Please try again later or contact support if the problem persists.",
+      },
       { status: 500 },
     );
   }

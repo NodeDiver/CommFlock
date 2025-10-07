@@ -83,7 +83,10 @@ export async function POST(
   } catch (error) {
     logger.error("Error joining community:", error);
     return NextResponse.json(
-      { error: "Failed to join community" },
+      {
+        error:
+          "Unable to join community at this time. Please try again later or contact support if the problem persists.",
+      },
       { status: 500 },
     );
   }

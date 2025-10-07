@@ -117,7 +117,10 @@ export async function POST(request: NextRequest) {
 
     if (existingCommunity) {
       return NextResponse.json(
-        { error: "Slug already taken" },
+        {
+          error:
+            "A community with this name already exists. Please choose a different name or customize the URL slug.",
+        },
         { status: 400 },
       );
     }
@@ -164,12 +167,18 @@ export async function POST(request: NextRequest) {
     logger.error("Error creating community:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
-        { error: "Invalid input data" },
+        {
+          error:
+            "Please check your input. Community name is required and must be between 3-50 characters.",
+        },
         { status: 400 },
       );
     }
     return NextResponse.json(
-      { error: "Failed to create community" },
+      {
+        error:
+          "Unable to create community at this time. Please try again later or contact support if the problem persists.",
+      },
       { status: 500 },
     );
   }

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -39,13 +40,18 @@ export default function SignInPage() {
       });
 
       if (result?.ok) {
+        toast.success("Welcome back! 👋");
         router.push(`/${locale}/discover`);
       } else {
-        setError("Invalid username or password");
+        const errorMsg = "Invalid username or password";
+        setError(errorMsg);
+        toast.error(errorMsg);
         logger.error("Sign in failed", { username });
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      const errorMsg = "An error occurred. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
       logger.error("Sign in error", error);
     } finally {
       setIsLoading(false);

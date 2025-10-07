@@ -48,7 +48,10 @@ export async function POST(
     const existingVote = poll.votes.find((v) => v.userId === session.user.id);
     if (existingVote) {
       return NextResponse.json(
-        { error: "You have already voted" },
+        {
+          error:
+            "You have already voted in this poll. Each user can only vote once.",
+        },
         { status: 400 },
       );
     }
@@ -88,8 +91,17 @@ export async function POST(
   } catch (error) {
     logger.error("Error voting:", error);
     if (error instanceof Error && error.name === "ZodError") {
-      return NextResponse.json({ error: "Invalid vote data" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Please select a valid poll option." },
+        { status: 400 },
+      );
     }
-    return NextResponse.json({ error: "Failed to vote" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error:
+          "Unable to submit your vote at this time. Please try again later.",
+      },
+      { status: 500 },
+    );
   }
 }

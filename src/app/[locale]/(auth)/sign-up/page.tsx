@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
@@ -36,13 +37,17 @@ export default function SignUpPage() {
 
     // Validate passwords match
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      const errorMsg = "Passwords do not match";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     // Validate password length
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long");
+      const errorMsg = "Password must be at least 6 characters long";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -52,15 +57,18 @@ export default function SignUpPage() {
       !lightningAddress.includes("@") &&
       !lightningAddress.startsWith("lnurl")
     ) {
-      setError(
-        "Lightning address should be in format: yourname@domain.com or lnurl...",
-      );
+      const errorMsg =
+        "Lightning address should be in format: yourname@domain.com or lnurl...";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     // Validate Nostr Pubkey format (if provided)
     if (nostrPubkey && !nostrPubkey.startsWith("npub1")) {
-      setError("Nostr public key should start with npub1");
+      const errorMsg = "Nostr public key should start with npub1";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -86,6 +94,8 @@ export default function SignUpPage() {
 
       if (response.ok) {
         // Account created successfully, now sign in
+        toast.success("Account created successfully! Signing you in...");
+
         const result = await signIn("credentials", {
           username,
           password,
@@ -93,18 +103,24 @@ export default function SignUpPage() {
         });
 
         if (result?.ok) {
+          toast.success("Welcome to CommFlock! 🎉");
           router.push(`/${locale}/discover`);
         } else {
           setError(
             "Account created but sign in failed. Please try signing in manually.",
           );
+          toast.error(
+            "Account created, but automatic sign-in failed. Please sign in manually.",
+          );
         }
       } else {
         setError(data.error || "Sign up failed");
+        toast.error(data.error || "Sign up failed. Please try again.");
       }
     } catch (error) {
       logger.error("Sign up error:", error);
       setError("An error occurred. Please try again.");
+      toast.error("An error occurred during sign up. Please try again.");
     } finally {
       setIsLoading(false);
     }
